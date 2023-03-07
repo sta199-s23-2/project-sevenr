@@ -1,5 +1,5 @@
 ---
-title: "Project title"
+title: "Sevenr Proposal"
 subtitle: "Proposal"
 format: html
 editor: visual
@@ -18,19 +18,33 @@ library(tidyverse)
 
 -   Identify the source of the data.
 
+    -   The source of this data is CORGIS dataset project, which pulled it from the "Million Song Dataset."
+
 -   State when and how it was originally collected (by the original data curator, not necessarily how you found the data).
 
+    -   It was originally collected by Echo Nest, which derived data points about 1 million popular songs. It was collected in 2011. Echo Nest worked in collaboration with LabROSA, which uses intelligent machine listening, enabling the collection of certian data points
+
 -   Write a brief description of the observations.
+
+    -   In addition to "strings" referencing the names of artists and the style of music with which they are associated, there are many "float" variables to measure things such as how often an artist's songs conform with the style with which they are associated, the average start times of bars and beats in their songs, the loudness of the track, and other variables associated with details of each song.
+
+-   
 
 ## Research question
 
 -   A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)
 
+    -   For each of the following music styles---rock, country, and jazz---what variable(s) best explain the 10 most popular songs in that style, and does that variable change depending on the year?
+
 -   A description of the research topic along with a concise statement of your hypotheses on this topic.
+
+    -   Different people have different tastes when it comes to music. The goal is to establish what aspect of each genre of music makes it most appealing to listeners of that music, and whether those tastes change. Our hypothesis is that the best explanatory variable changes by year for rock, but not for country and jazz.
 
 -   Identify the types of variables in your research question. Categorical? Quantitative?
 
-## Literature 
+    -   Besides the categorical variables used to identify the song id and genre, the rest of the variables should be quantitative---notably year, level of popularity (which is given on a scale of 0 to 1), tempo, beat interval, etc.
+
+## Literature
 
 -   Find one published credible article on the topic you are interested in researching.
 
@@ -64,7 +78,7 @@ library(tidyverse)
 
 -   Identify the types of variables in your research question. Categorical? Quantitative?
 
-## Literature 
+## Literature
 
 -   Find one published credible article on the topic you are interested in researching.
 
@@ -98,7 +112,7 @@ library(tidyverse)
 
 -   Identify the types of variables in your research question. Categorical? Quantitative?
 
-## Literature 
+## Literature
 
 -   Find one published credible article on the topic you are interested in researching.
 
