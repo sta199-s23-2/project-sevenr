@@ -66,17 +66,29 @@ library(tidyverse)
 
 -   Identify the source of the data.
 
+    -   The variables name, rank, citizenship, countrycode, net worth in billions, self made status, age, source of wealth, and type of wealth are from Forbes. The GDP variable comes from the World Bank World Development Indicators. The rest of the variables are from the author\'s calculations.
+
 -   State when and how it was originally collected (by the original data curator, not necessarily how you found the data).
 
+    -   The data was collected in February 2016 by Caroline Freund and Sarah Oliver at the Peterson Institute for International Economics. It was originally collected by collecting information from Forbes along with other sources for some variables. For others, the author derived values by doing calculations on information from existed variables.
+
 -   Write a brief description of the observations.
+
+    -   From [Source](https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917): The data shows that the median age of a company of a European billionaire is nearly 20 years older than that of an American billionaire. Traditional sectors explain more than half of the rise in wealth in Europe; the financial sector and technology-related sectors together are largely responsible for the rise in US wealth.
 
 ## Research question
 
 -   A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)
 
+    -   Are more billionaires in richer countries self made compared to billionaires in poorer countries?
+
 -   A description of the research topic along with a concise statement of your hypotheses on this topic.
 
+    -   The research topic is global billionaire wealth. We want to focus on how inheritance affects wealth, and how different countries have different proportions of self-made billionaires. This can help aid understanding economic inequality within countries and how the wealth of a country can aid or hurt one\'s ability to become a self-made billionaire. We hypothesize that there will be a higher proportion of self-made billionaires in richer countries compared to billionaires in poorer countries because richer countries may have higher mobility and better education.
+
 -   Identify the types of variables in your research question. Categorical? Quantitative?
+
+    -   The variables that we would measure to help explain the research question are quantatative and categorical. To measure inheritance, the data set has a categorical variable that measures if the wealth is inherited and how it is inherited if it is. To measure wealth of a country where the billionaire lives, we can measure the GDP of the country, a quantatative variable. To measure wealth, we can measure billionare rank compared to the rest of the billionaires and their worth in billions which are both quantative.
 
 ## Literature
 
@@ -91,7 +103,8 @@ library(tidyverse)
 ```{r}
 #| label: load-data-2
 
-# add code here
+billion <- read.csv("data/billionaires.csv")
+glimpse(billion)
 ```
 
 # Data 3
