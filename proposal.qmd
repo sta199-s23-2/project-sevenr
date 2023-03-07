@@ -1,6 +1,11 @@
 ---
+<<<<<<< HEAD
 title: "Sevenr Proposal"
 subtitle: "Proposal"
+=======
+title: "Project title"
+subtitle: "Proposal SevenR"
+>>>>>>> ab46a82f8e564a7d55af50f1575bbe3adb7ae183
 format: html
 editor: visual
 ---
@@ -42,8 +47,11 @@ library(tidyverse)
 
 -   Identify the types of variables in your research question. Categorical? Quantitative?
 
+<<<<<<< HEAD
     -   Besides the categorical variables used to identify the song id and genre, the rest of the variables should be quantitative---notably year, level of popularity (which is given on a scale of 0 to 1), tempo, beat interval, etc.
 
+=======
+>>>>>>> ab46a82f8e564a7d55af50f1575bbe3adb7ae183
 ## Literature
 
 -   Find one published credible article on the topic you are interested in researching.
