@@ -1,6 +1,6 @@
 ---
 title: "Project title"
-subtitle: "Proposal"
+subtitle: "Proposal SevenR"
 format: html
 editor: visual
 ---
