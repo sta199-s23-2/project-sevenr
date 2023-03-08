@@ -2,19 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.0.36">
+<meta name="generator" content="quarto-1.1.251">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Project title</title>
+<title>Sevenr Proposal</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -53,7 +58,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -66,7 +71,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -157,7 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
+        <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -190,7 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project title</h1>
+<h1 class="title">Sevenr Proposal</h1>
 <p class="subtitle lead">Proposal</p>
 </div>
 
@@ -207,35 +212,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.2.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'tidyr' was built under R version 4.2.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'readr' was built under R version 4.2.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'purrr' was built under R version 4.2.2</code></pre>
-</div>
 </div>
 <section id="data-1" class="level1">
 <h1>Data 1</h1>
 <section id="introduction-and-data" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-and-data">Introduction and data</h2>
 <ul>
-<li><p>Identify the source of the data.</p></li>
-<li><p>State when and how it was originally collected (by the original data curator, not necessarily how you found the data).</p></li>
-<li><p>Write a brief description of the observations.</p></li>
+<li><p>Identify the source of the data.</p>
+<ul>
+<li>The source of this data is CORGIS dataset project, which pulled it from the “Million Song Dataset.”</li>
+</ul></li>
+<li><p>State when and how it was originally collected (by the original data curator, not necessarily how you found the data).</p>
+<ul>
+<li>It was originally collected by Echo Nest, which derived data points about 1 million popular songs. It was collected in 2011. Echo Nest worked in collaboration with LabROSA, which uses intelligent machine listening, enabling the collection of certian data points</li>
+</ul></li>
+<li><p>Write a brief description of the observations.</p>
+<ul>
+<li>In addition to “strings” referencing the names of artists and the style of music with which they are associated, there are many “float” variables to measure things such as how often an artist’s songs conform with the style with which they are associated, the average start times of bars and beats in their songs, the loudness of the track, and other variables associated with details of each song.</li>
+</ul></li>
+<li></li>
 </ul>
 </section>
 <section id="research-question" class="level2">
 <h2 class="anchored" data-anchor-id="research-question">Research question</h2>
 <ul>
-<li>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</li>
-<li>A description of the research topic along with a concise statement of your hypotheses on this topic.</li>
-<li>Identify the types of variables in your research question. Categorical? Quantitative?</li>
+<li><p>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</p>
+<ul>
+<li>For each of the following music styles—rock, country, and jazz—what variable(s) best explain the 10 most popular songs in that style, and does that variable change depending on the year?</li>
+</ul></li>
+<li><p>A description of the research topic along with a concise statement of your hypotheses on this topic.</p>
+<ul>
+<li>Different people have different tastes when it comes to music. The goal is to establish what aspect of each genre of music makes it most appealing to listeners of that music, and whether those tastes change. Our hypothesis is that the best explanatory variable changes by year for rock, but not for country and jazz.</li>
+</ul></li>
+<li><p>Identify the types of variables in your research question. Categorical? Quantitative?</p>
+<ul>
+<li>Besides the categorical variables used to identify the song id and genre, the rest of the variables should be quantitative—notably year, level of popularity (which is given on a scale of 0 to 1), tempo, beat interval, etc.</li>
+</ul></li>
 </ul>
 </section>
 <section id="literature" class="level2">
@@ -249,7 +261,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="glimpse-of-data" class="level2">
 <h2 class="anchored" data-anchor-id="glimpse-of-data">Glimpse of data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -258,17 +270,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="introduction-and-data-1" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-and-data-1">Introduction and data</h2>
 <ul>
-<li><p>Identify the source of the data.</p></li>
-<li><p>State when and how it was originally collected (by the original data curator, not necessarily how you found the data).</p></li>
-<li><p>Write a brief description of the observations.</p></li>
+<li><p>Identify the source of the data.</p>
+<ul>
+<li>The variables name, rank, citizenship, countrycode, net worth in billions, self made status, age, source of wealth, and type of wealth are from Forbes. The GDP variable comes from the World Bank World Development Indicators. The rest of the variables are from the author's calculations.</li>
+</ul></li>
+<li><p>State when and how it was originally collected (by the original data curator, not necessarily how you found the data).</p>
+<ul>
+<li>The data was collected in February 2016 by Caroline Freund and Sarah Oliver at the Peterson Institute for International Economics. It was originally collected by collecting information from Forbes along with other sources for some variables. For others, the author derived values by doing calculations on information from existed variables.</li>
+</ul></li>
+<li><p>Write a brief description of the observations.</p>
+<ul>
+<li>From <a href="https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917">Source</a>: The data shows that the median age of a company of a European billionaire is nearly 20 years older than that of an American billionaire. Traditional sectors explain more than half of the rise in wealth in Europe; the financial sector and technology-related sectors together are largely responsible for the rise in US wealth.</li>
+</ul></li>
 </ul>
 </section>
 <section id="research-question-1" class="level2">
 <h2 class="anchored" data-anchor-id="research-question-1">Research question</h2>
 <ul>
-<li>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</li>
-<li>A description of the research topic along with a concise statement of your hypotheses on this topic.</li>
-<li>Identify the types of variables in your research question. Categorical? Quantitative?</li>
+<li><p>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</p>
+<ul>
+<li>Are more billionaires in richer countries self made compared to billionaires in poorer countries?</li>
+</ul></li>
+<li><p>A description of the research topic along with a concise statement of your hypotheses on this topic.</p>
+<ul>
+<li>The research topic is global billionaire wealth. We want to focus on how inheritance affects wealth, and how different countries have different proportions of self-made billionaires. This can help aid understanding economic inequality within countries and how the wealth of a country can aid or hurt one's ability to become a self-made billionaire. We hypothesize that there will be a higher proportion of self-made billionaires in richer countries compared to billionaires in poorer countries because richer countries may have higher mobility and better education.</li>
+</ul></li>
+<li><p>Identify the types of variables in your research question. Categorical? Quantitative?</p>
+<ul>
+<li>The variables that we would measure to help explain the research question are quantatative and categorical. To measure inheritance, the data set has a categorical variable that measures if the wealth is inherited and how it is inherited if it is. To measure wealth of a country where the billionaire lives, we can measure the GDP of the country, a quantatative variable. To measure wealth, we can measure billionare rank compared to the rest of the billionaires and their worth in billions which are both quantative.</li>
+</ul></li>
 </ul>
 </section>
 <section id="literature-1" class="level2">
@@ -282,7 +312,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="glimpse-of-data-1" class="level2">
 <h2 class="anchored" data-anchor-id="glimpse-of-data-1">Glimpse of data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>billion <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/billionaires.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(billion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 2,614
+Columns: 22
+$ name                     &lt;chr&gt; "Bill Gates", "Bill Gates", "Bill Gates", "Wa…
+$ rank                     &lt;int&gt; 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, …
+$ year                     &lt;int&gt; 1996, 2001, 2014, 1996, 2001, 2014, 1996, 200…
+$ company.founded          &lt;int&gt; 1975, 1975, 1975, 1962, 1962, 1990, 1896, 197…
+$ company.name             &lt;chr&gt; "Microsoft", "Microsoft", "Microsoft", "Berks…
+$ company.relationship     &lt;chr&gt; "founder", "founder", "founder", "founder", "…
+$ company.sector           &lt;chr&gt; " Software", " Software", " Software", " Fina…
+$ company.type             &lt;chr&gt; "new", "new", "new", "new", "new", "privatiza…
+$ demographics.age         &lt;int&gt; 40, 45, 58, 65, 70, 74, 0, 48, 77, 68, 56, 83…
+$ demographics.gender      &lt;chr&gt; "male", "male", "male", "male", "male", "male…
+$ location.citizenship     &lt;chr&gt; "United States", "United States", "United Sta…
+$ location.country.code    &lt;chr&gt; "USA", "USA", "USA", "USA", "USA", "MEX", "CH…
+$ location.gdp             &lt;dbl&gt; 8.10e+12, 1.06e+13, 0.00e+00, 8.10e+12, 1.06e…
+$ location.region          &lt;chr&gt; "North America", "North America", "North Amer…
+$ wealth.type              &lt;chr&gt; "founder non-finance", "founder non-finance",…
+$ wealth.worth.in.billions &lt;dbl&gt; 18.5, 58.7, 76.0, 15.0, 32.3, 72.0, 13.1, 30.…
+$ wealth.how.category      &lt;chr&gt; "New Sectors", "New Sectors", "New Sectors", …
+$ wealth.how.from.emerging &lt;chr&gt; "True", "True", "True", "True", "True", "True…
+$ wealth.how.industry      &lt;chr&gt; "Technology-Computer", "Technology-Computer",…
+$ wealth.how.inherited     &lt;chr&gt; "not inherited", "not inherited", "not inheri…
+$ wealth.how.was.founder   &lt;chr&gt; "True", "True", "True", "True", "True", "True…
+$ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "True…</code></pre>
+</div>
 </div>
 </section>
 </section>
@@ -299,9 +356,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="research-question-2" class="level2">
 <h2 class="anchored" data-anchor-id="research-question-2">Research question</h2>
 <ul>
-<li>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</li>
-<li>A description of the research topic along with a concise statement of your hypotheses on this topic.</li>
-<li>Identify the types of variables in your research question. Categorical? Quantitative?</li>
+<li><p>A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)</p></li>
+<li><p>A description of the research topic along with a concise statement of your hypotheses on this topic.</p></li>
+<li><p>Identify the types of variables in your research question. Categorical? Quantitative?</p></li>
 </ul>
 </section>
 <section id="literature-2" class="level2">
@@ -315,7 +372,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="glimpse-of-data-2" class="level2">
 <h2 class="anchored" data-anchor-id="glimpse-of-data-2">Glimpse of data</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
@@ -392,7 +449,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
