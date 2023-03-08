@@ -55,9 +55,10 @@ library(tidyverse)
 ## Glimpse of data
 
 ```{r}
-#| label: load-data-1
+#| label: load-music
 
-# add code here
+music <- read.csv("data/music.csv")
+glimpse(music)
 ```
 
 # Data 2
@@ -88,7 +89,7 @@ library(tidyverse)
 
 -   Identify the types of variables in your research question. Categorical? Quantitative?
 
-    The variables that we would measure to help explain the research question are quantatative and categorical. To measure inheritance, the data set has a categorical variable that measures if the wealth is inherited and how it is inherited if it is. To measure wealth of a country where the billionaire lives, we can measure the GDP of the country, a quantatative variable. To measure wealth, we can measure billionare rank compared to the rest of the billionaires and their worth in billions which are both quantative.
+    The variables that we would measure to help explain the research question are quantitative and categorical. To measure inheritance, the data set has a categorical variable that measures if the wealth is inherited and how it is inherited if it is. To measure wealth of a country where the billionaire lives, we can measure the GDP of the country, a quantitative variable. To measure wealth, we can measure billionaire rank compared to the rest of the billionaires and their worth in billions which are both quantitative.
 
 ## Literature
 
@@ -98,14 +99,16 @@ library(tidyverse)
 
 -   Provide a one paragraph summary about the article.
 
-    The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context.
+    The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context. The countries/regions mentioned are Russia, Latin America, China, and India. The major project relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India's growing wealth, in reality people are growing poorer and poorer. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.
 
 -   In 1-2 sentences, explain how your research question builds on / is different than the article you have cited.
+
+    The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world by asking a very similar question, but with all countries in the dataset in mind.
 
 ## Glimpse of data
 
 ```{r}
-#| label: load-data-2
+#| label: load-billion
 
 billion <- read.csv("data/billionaires.csv")
 glimpse(billion)
