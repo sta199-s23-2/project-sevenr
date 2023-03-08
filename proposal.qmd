@@ -95,7 +95,7 @@ glimpse(music)
 
 -   Find one published credible article on the topic you are interested in researching.
 
-    https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button
+    <https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
 
 -   Provide a one paragraph summary about the article.
 
@@ -120,9 +120,15 @@ glimpse(billion)
 
 -   Identify the source of the data.
 
+    National Survey of Recent College Graduates
+
 -   State when and how it was originally collected (by the original data curator, not necessarily how you found the data).
 
+    The data was originally collected in 2010 by the National Science Foundation. They asked individuals in the US under 76 with a college degree obtained within 2-3 years ago about the information that became the variables of the dataset.
+
 -   Write a brief description of the observations.
+
+    There are 517 observations, each of which correspond to a person surveyed. The identifying variables are Year and Education.Major. The other 48 variables include demographic information, salary information, employment status information, and so on.
 
 ## Research question
 
@@ -143,7 +149,8 @@ glimpse(billion)
 ## Glimpse of data
 
 ```{r}
-#| label: load-data-3
+#| label: load-graduates
 
-# add code here
+graduates <- read.csv("data/graduates.csv")
+glimpse(graduates)
 ```
