@@ -9,6 +9,24 @@ execute:
 
 ## Introduction and data
 
+Source, topic, when, how, cases, relevant variables
+
+Ethical concerns?
+
+Our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
+
+Our hypothesis is that ?
+
 ## Methodology
 
+Multivariate linear regression
+
+Dataset cleaning (lots of 0s for some reason)
+
+Model building
+
+Other tools
+
 ## Results
+
+Two (or more) linear regression models
