@@ -46,15 +46,15 @@ library(tidyverse)
 
 ## Literature
 
-\"What makes for a hit pop song? What makes for a pop song?
+"What makes for a hit pop song? What makes for a pop song?
 
 Nicholas Borg and George Hokkanen
 
 <http://cs229.stanford.edu/proj2011/BorgHokkanen-WhatMakesForAHitPopSong.pdf> \
 
-This research article is about the possibility of predicting a hit song based on song features and genre detection. In terms of the data, they took a dataset of 10,000 songs that contained information such as loudness, tempo, key, and other musical features for each song, and they measured the popularity of each song based on the view counts for the song on YouTube. On initial preliminary analysis using basic correlation coefficients, they found that factors like tempo, loudness, and danceability had very weak correlations to song popularity. They faced difficulties because a lot of the variables they measured are largely based on song length, so they had to manipulate the data to normalize this so that the numbers were consistent. They found that there was very little from the audio features of the song that could accurately predict its popularity, and they reasoned that social factors such as the artist\'s popularity were better predictors. They did have some success at using these factors to predict the song\'s genre, though, which could be an interesting angle.
+This research article is about the possibility of predicting a hit song based on song features and genre detection. In terms of the data, they took a dataset of 10,000 songs that contained information such as loudness, tempo, key, and other musical features for each song, and they measured the popularity of each song based on the view counts for the song on YouTube. On initial preliminary analysis using basic correlation coefficients, they found that factors like tempo, loudness, and danceability had very weak correlations to song popularity. They faced difficulties because a lot of the variables they measured are largely based on song length, so they had to manipulate the data to normalize this so that the numbers were consistent. They found that there was very little from the audio features of the song that could accurately predict its popularity, and they reasoned that social factors such as the artist's popularity were better predictors. They did have some success at using these factors to predict the song's genre, though, which could be an interesting angle.
 
-Our research question builds on this because we also are looking at various musical features such as pitch, tempo, and loudness and seeing how well they predict a song\'s popularity based on certain genres. We also are going to see if any of the relationships change based on year too. Hopefully we can reach a better conclusion than the articles and find some interesting connections.
+Our research question builds on this because we also are looking at various musical features such as pitch, tempo, and loudness and seeing how well they predict a song's popularity based on certain genres. We also are going to see if any of the relationships change based on year too. Hopefully we can reach a better conclusion than the articles and find some interesting connections.
 
 \
 \
