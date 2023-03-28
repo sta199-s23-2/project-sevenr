@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Team member 1: One sentence description of Team member 1 (e.g., year, major, etc.).\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
+    "text": "Koji Bilbao: Neuroscience major and philosophy minor from Guam\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
   },
   {
     "objectID": "index.html",
@@ -110,5 +110,19 @@
     "title": "Project title",
     "section": "",
     "text": "Add project writeup here."
+  },
+  {
+    "objectID": "report.html#methodology",
+    "href": "report.html#methodology",
+    "title": "Project title",
+    "section": "Methodology",
+    "text": "Methodology"
+  },
+  {
+    "objectID": "report.html#results",
+    "href": "report.html#results",
+    "title": "Project title",
+    "section": "Results",
+    "text": "Results"
   }
 ]
