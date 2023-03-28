@@ -12,7 +12,7 @@ editor: visual
 library(tidyverse)
 ```
 
-# Data 1
+# Music
 
 ## Introduction and data
 
@@ -68,7 +68,7 @@ music <- read.csv("data/music.csv")
 glimpse(music)
 ```
 
-# Data 2
+# Billionaires
 
 ## Introduction and data
 
@@ -121,7 +121,7 @@ billion <- read.csv("data/billionaires.csv")
 glimpse(billion)
 ```
 
-# Data 3
+# Graduates
 
 ## Introduction and data
 
@@ -141,17 +141,29 @@ glimpse(billion)
 
 -   A well formulated research question. (You may include more than one research question if you want to receive feedback on different ideas for your project. However, one per data set is required.)
 
+    -   Do graduates with doctorates in general on average make more than graduates in industry with a bachelors in business/industry ?
+
 -   A description of the research topic along with a concise statement of your hypotheses on this topic.
 
+    -   Today expected income is among the most salient factors when choosing a higher education path. The risk to reward ratio is often calculated between time committed in education to subsequent income. The two conflicting schools of thought are typically between maximizing education (pursuing a doctorate) and maximizing time in industry (forgoing a doctorate and committing to industry after University). We hope to address these concerns while factoring in other possible confounding variables. We hypothesize that graduates with doctorates will on average have a higher income than those with a bachelors in business who are currently in industry.
+
 -   Identify the types of variables in your research question. Categorical? Quantitative?
+
+    -   The median salaries are a quantitative variable while variables like major type and having a doctorates vs a bachelors are categorical despite being labeled as integers in the data set.
 
 ## Literature
 
 -   Find one published credible article on the topic you are interested in researching.
 
+    -   https://www.bls.gov/careeroutlook/2022/data-on-display/education-pays.htm
+
 -   Provide a one paragraph summary about the article.
 
+    -   The bureau of labor statistics reports on the median weekly incomes of people across varying levels of education within survey subjects within the United States. At the top of the list only beaten out by those with professional degrees are those who have graduated with doctorates while those who have graduated with bachelors alone appear shortly after two places down the list, largely supporting our hypothesis.
+
 -   In 1-2 sentences, explain how your research question builds on / is different than the article you have cited.
+
+    -   The title of the article aptly is "education pays" and shows largely that, but fails to elucidate more on whether time in business oriented industry after a bachelors degree on the topic raises the median income of those with bachelors and without doctorates. We hope to fill this gap in our knowledge.
 
 ## Glimpse of data
 
