@@ -19,7 +19,7 @@ Our hypothesis is that ?
 
 ## Methodology
 
-Multivariate linear regression
+Multivariate linear regression.
 
 Dataset cleaning (lots of 0s for some reason)
 
