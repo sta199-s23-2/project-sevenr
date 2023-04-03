@@ -49,6 +49,16 @@ glimpse(billion)
 #| label: Filtering-data
 
 variable_filter <- billion |>
+  filter(year == 2014) |>
   select(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)
+
+inheritance_grouping <- variable_filter |>
+  mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited")) |>
+  count(inherited)
+
+inheritance_grouping
+```
+
+```{r}
 
 ```

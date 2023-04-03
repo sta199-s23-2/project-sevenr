@@ -244,7 +244,22 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>variable_filter <span class="ot">&lt;-</span> billion <span class="sc">|&gt;</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2014</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>inheritance_grouping <span class="ot">&lt;-</span> variable_filter <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">inherited =</span> <span class="fu">if_else</span>(<span class="fu">str_detect</span>(wealth.how.inherited, <span class="st">"not inherited"</span>), <span class="st">"not inherited"</span>, <span class="st">"inherited"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(inherited)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>inheritance_grouping</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      inherited    n
+1     inherited  502
+2 not inherited 1151</code></pre>
+</div>
+</div>
+<div class="cell">
+
 </div>
 
 
