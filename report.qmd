@@ -36,6 +36,7 @@ Two (or more) linear regression models
 #| message: false
 
 library(tidyverse)
+library(tidymodels)
 ```
 
 ```{r}
@@ -49,16 +50,117 @@ glimpse(billion)
 #| label: Filtering-data
 
 variable_filter <- billion |>
-  filter(year == 2014) |>
+  filter(year == 2001) |>
   select(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)
 
 inheritance_grouping <- variable_filter |>
-  mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited")) |>
-  count(inherited)
+  mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"))
 
-inheritance_grouping
+yes_inherited <- inheritance_grouping |>
+  filter(inherited == "inherited")
+
+not_inherited <- inheritance_grouping |>
+  filter(inherited == "not inherited")
 ```
 
 ```{r}
+#| label: location-regression
 
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ location.gdp, data = variable_filter) |>
+  tidy()
+ 
+variable_filter |>
+  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+ 
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ location.gdp, data = yes_inherited) |>
+  tidy()
+ 
+yes_inherited |>
+  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ location.gdp, data = not_inherited) |>
+  tidy()
+ 
+not_inherited |>
+  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+
+```
+
+```{r}
+#| label: sector-regression
+
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ company.sector, data = variable_filter) |>
+  tidy()
+ 
+variable_filter |>
+  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+ 
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ company.sector, data = yes_inherited) |>
+  tidy()
+ 
+yes_inherited |>
+  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+ 
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ company.sector, data = not_inherited) |>
+  tidy()
+ 
+not_inherited |>
+  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
+```
+
+```{r}
+#| label: age-regression
+ linear_reg() |>
+    set_engine("lm") |>
+    fit(wealth.worth.in.billions ~ demographics.age, data = variable_filter) |>
+    tidy()
+ 
+ variable_filter |>
+    ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = F) 
+ 
+linear_reg() |>
+    set_engine("lm") |>
+    fit(wealth.worth.in.billions ~ demographics.age, data = yes_inherited) |>
+    tidy()
+ 
+ yes_inherited |>
+    ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = F) 
+ 
+linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ demographics.age, data = not_inherited) |>
+  tidy()
+ 
+not_inherited |>
+  ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) 
 ```
