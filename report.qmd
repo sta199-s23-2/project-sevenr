@@ -1,5 +1,5 @@
 ---
-title: "Project title"
+title: "Sevenr Project"
 subtitle: "Report"
 format: html
 editor: visual
@@ -30,3 +30,25 @@ Other tools
 ## Results
 
 Two (or more) linear regression models
+
+```{r}
+#| label: load-pkgs
+#| message: false
+
+library(tidyverse)
+```
+
+```{r}
+#| label: load-billion
+
+billion <- read.csv("data/billionaires.csv")
+glimpse(billion)
+```
+
+```{r}
+#| label: Filtering-data
+
+variable_filter <- billion |>
+  select(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)
+
+```

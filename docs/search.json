@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Koji Bilbao: Neuroscience major and philosophy minor from Guam\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
+    "text": "Koji Bilbao: Neuroscience major and philosophy minor from Guam, Sophomore.\nMaya Markus-Malone: Freshman with a computer science major and creative writing minor from Connecticut.\nMichael Wang: Junior studying neuroscience with a music minor from Cary, NC.\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
   },
   {
     "objectID": "index.html",
@@ -107,22 +107,22 @@
   {
     "objectID": "report.html",
     "href": "report.html",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "",
-    "text": "Add project writeup here."
+    "text": "Source, topic, when, how, cases, relevant variables\nEthical concerns?\nOur research question is: “do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?” That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?\nOur hypothesis is that ?"
   },
   {
     "objectID": "report.html#methodology",
     "href": "report.html#methodology",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "Methodology",
-    "text": "Methodology"
+    "text": "Methodology\nMultivariate linear regression.\nDataset cleaning (lots of 0s for some reason)\nModel building\nOther tools"
   },
   {
     "objectID": "report.html#results",
     "href": "report.html#results",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "Results",
-    "text": "Results"
+    "text": "Results\nTwo (or more) linear regression models\n\nlibrary(tidyverse)\n\n\nbillion <- read.csv(\"data/billionaires.csv\")\nglimpse(billion)\n\nRows: 2,614\nColumns: 22\n$ name                     <chr> \"Bill Gates\", \"Bill Gates\", \"Bill Gates\", \"Wa…\n$ rank                     <int> 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, …\n$ year                     <int> 1996, 2001, 2014, 1996, 2001, 2014, 1996, 200…\n$ company.founded          <int> 1975, 1975, 1975, 1962, 1962, 1990, 1896, 197…\n$ company.name             <chr> \"Microsoft\", \"Microsoft\", \"Microsoft\", \"Berks…\n$ company.relationship     <chr> \"founder\", \"founder\", \"founder\", \"founder\", \"…\n$ company.sector           <chr> \" Software\", \" Software\", \" Software\", \" Fina…\n$ company.type             <chr> \"new\", \"new\", \"new\", \"new\", \"new\", \"privatiza…\n$ demographics.age         <int> 40, 45, 58, 65, 70, 74, 0, 48, 77, 68, 56, 83…\n$ demographics.gender      <chr> \"male\", \"male\", \"male\", \"male\", \"male\", \"male…\n$ location.citizenship     <chr> \"United States\", \"United States\", \"United Sta…\n$ location.country.code    <chr> \"USA\", \"USA\", \"USA\", \"USA\", \"USA\", \"MEX\", \"CH…\n$ location.gdp             <dbl> 8.10e+12, 1.06e+13, 0.00e+00, 8.10e+12, 1.06e…\n$ location.region          <chr> \"North America\", \"North America\", \"North Amer…\n$ wealth.type              <chr> \"founder non-finance\", \"founder non-finance\",…\n$ wealth.worth.in.billions <dbl> 18.5, 58.7, 76.0, 15.0, 32.3, 72.0, 13.1, 30.…\n$ wealth.how.category      <chr> \"New Sectors\", \"New Sectors\", \"New Sectors\", …\n$ wealth.how.from.emerging <chr> \"True\", \"True\", \"True\", \"True\", \"True\", \"True…\n$ wealth.how.industry      <chr> \"Technology-Computer\", \"Technology-Computer\",…\n$ wealth.how.inherited     <chr> \"not inherited\", \"not inherited\", \"not inheri…\n$ wealth.how.was.founder   <chr> \"True\", \"True\", \"True\", \"True\", \"True\", \"True…\n$ wealth.how.was.political <chr> \"True\", \"True\", \"True\", \"True\", \"True\", \"True…\n\n\n\nvariable_filter <- billion |>\n  select(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)"
   }
 ]
