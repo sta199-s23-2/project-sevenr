@@ -7,7 +7,20 @@ execute:
   echo: true
 ---
 
+```{r}
+#| label: load-pkgs
+#| message: false
+library(tidyverse)
+library(tidymodels)
+```
+
 ## Introduction and data
+
+```{r}
+#| label: load-billion
+billion <- read.csv("data/billionaires.csv")
+glimpse(billion)
+```
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
@@ -34,24 +47,8 @@ Other tools
 Two (or more) linear regression models
 
 ```{r}
-#| label: load-pkgs
-#| message: false
-
-library(tidyverse)
-library(tidymodels)
-```
-
-```{r}
-#| label: load-billion
-
-billion <- read.csv("data/billionaires.csv")
-#glimpse(billion)
-```
-
-```{r}
 #| label: data-cleaning
 
-#filtering for year 2001 (not 2014 because of missing gdp info)
 billion2001 <- billion |>
   filter(year == 2001) |>
   rename(industry = wealth.how.industry) |>
@@ -64,10 +61,13 @@ billion2001 <- billion |>
     industry = if_else(industry == "Venture Capital", "Money management", industry),
     industry = if_else(industry == "Private equity/leveraged buyout", "Money management", industry),
     industry = if_else(industry == "Money Management", "Money management", industry),
-    industry = if_else(industry == "Constrution" | industry == "Real Estate", "Real estate, construction", industry)
+    industry = if_else(industry == "Constrution" | industry == "Real Estate", "Real estate, construction", industry),
+    industry = if_else(industry == "Consumer" | industry == "Retail, Restaurant", "Consumer goods, retail, restaurants", industry)
   )
+```
 
-#var inherited groups inheritance; creating two frames for inherited and not inherited
+```{r}
+#| label: grouping by inheritance
 inheritance_grouping <- billion2001 |>
   mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"))
 
@@ -82,7 +82,7 @@ other: 0
 
 construction
 
-consumer
+consumer goods, retail, restaurant
 
 money management: diversified financial, hedge funds, venture capital, private equity/lev buyout
 
@@ -93,8 +93,6 @@ media
 non consumer industrial
 
 real estate
-
-retail, restaurant
 
 technology: computer, medical
 
@@ -136,7 +134,7 @@ not_inherited |>
 ```
 
 ```{r}
-#| label: sector-regression
+#| label: industry-regression
 
 #regression by industry for both groups
 linear_reg() |>
@@ -227,7 +225,7 @@ not_inherited |>
 
 -   added comments
 
--   commented out glimpse(billion2001)
+-   commented out glimpse(billion)
 
 -   cleaned up and combined industry levels (check underneath for groupings)
 
