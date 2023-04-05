@@ -34,6 +34,16 @@ Our hypothesis is that ?
 
 ## Methodology
 
+```{r}
+billion |> 
+  group_by(year) |> 
+  summarize(mean_gdp = mean(location.gdp))
+
+billion2001 <- billion |>
+  filter(year == 2001) |>
+  rename(wealth.how.industry = industry)
+```
+
 Multivariate linear regression.
 
 Dataset cleaning (lots of 0s for some reason)
@@ -49,9 +59,7 @@ Two (or more) linear regression models
 ```{r}
 #| label: data-cleaning
 
-billion2001 <- billion |>
-  filter(year == 2001) |>
-  rename(industry = wealth.how.industry) |>
+billion2001 <- billion2001 |>
   mutate(
     industry = if_else(industry == 0, "Other", industry),
     industry = if_else(industry == "Energy" | industry == "Mining and metals", "Energy, mining, and metals", industry),
