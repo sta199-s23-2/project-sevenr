@@ -41,7 +41,7 @@ billion |>
 
 billion2001 <- billion |>
   filter(year == 2001) |>
-  rename(wealth.how.industry = industry)
+  rename(industry = wealth.how.industry)
 ```
 
 Multivariate linear regression.
