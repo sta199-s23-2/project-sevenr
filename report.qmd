@@ -9,6 +9,8 @@ execute:
 
 ## Introduction and data
 
+<https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
+
 Source, topic, when, how, cases, relevant variables
 
 Ethical concerns?
@@ -43,17 +45,30 @@ library(tidymodels)
 #| label: load-billion
 
 billion <- read.csv("data/billionaires.csv")
-glimpse(billion)
+#glimpse(billion)
 ```
 
 ```{r}
-#| label: Filtering-data
+#| label: data-cleaning
 
-variable_filter <- billion |>
+#filtering for year 2001 (not 2014 because of missing gdp info)
+billion2001 <- billion |>
   filter(year == 2001) |>
-  select(wealth.worth.in.billions, location.gdp, company.sector, demographics.age, wealth.how.inherited)
+  rename(industry = wealth.how.industry) |>
+  mutate(
+    industry = if_else(industry == 0, "Other", industry),
+    industry = if_else(industry == "Energy" | industry == "Mining and metals", "Energy, mining, and metals", industry),
+    industry = if_else(str_detect(industry, "Technology"), "Technology", industry),
+    industry = if_else(industry == "Diversified financial", "Money management", industry),
+    industry = if_else(industry == "Hedge funds", "Money management", industry),
+    industry = if_else(industry == "Venture Capital", "Money management", industry),
+    industry = if_else(industry == "Private equity/leveraged buyout", "Money management", industry),
+    industry = if_else(industry == "Money Management", "Money management", industry),
+    industry = if_else(industry == "Constrution" | industry == "Real Estate", "Real estate, construction", industry)
+  )
 
-inheritance_grouping <- variable_filter |>
+#var inherited groups inheritance; creating two frames for inherited and not inherited
+inheritance_grouping <- billion2001 |>
   mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"))
 
 yes_inherited <- inheritance_grouping |>
@@ -63,19 +78,41 @@ not_inherited <- inheritance_grouping |>
   filter(inherited == "not inherited")
 ```
 
+other: 0
+
+construction
+
+consumer
+
+money management: diversified financial, hedge funds, venture capital, private equity/lev buyout
+
+energy: mining and metals
+
+media
+
+non consumer industrial
+
+real estate
+
+retail, restaurant
+
+technology: computer, medical
+
 ```{r}
 #| label: location-regression
 
+#regression by location.gdp for both groups
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp, data = variable_filter) |>
+  fit(wealth.worth.in.billions ~ location.gdp, data = billion2001) |>
   tidy()
  
-variable_filter |>
+billion2001 |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) 
  
+#regression for location.gdp for inherited
 linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ location.gdp, data = yes_inherited) |>
@@ -86,6 +123,7 @@ yes_inherited |>
   geom_point() +
   geom_smooth(method = "lm", se = F) 
 
+#regression for location.gdp for not inherited
 linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ location.gdp, data = not_inherited) |>
@@ -95,55 +133,60 @@ not_inherited |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) 
-
 ```
 
 ```{r}
 #| label: sector-regression
 
+#regression by industry for both groups
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ company.sector, data = variable_filter) |>
+  fit(wealth.worth.in.billions ~ industry, data = billion2001) |>
   tidy()
  
-variable_filter |>
-  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+billion2001 |>
+  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) 
  
+#regression by industry for inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ company.sector, data = yes_inherited) |>
+  fit(wealth.worth.in.billions ~ industry, data = yes_inherited) |>
   tidy()
  
 yes_inherited |>
-  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) 
  
+#regression by industry for not inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ company.sector, data = not_inherited) |>
+  fit(wealth.worth.in.billions ~ industry, data = not_inherited) |>
   tidy()
  
 not_inherited |>
-  ggplot(aes(x = company.sector, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) 
 ```
 
 ```{r}
 #| label: age-regression
- linear_reg() |>
+
+#regression by age for both groups
+linear_reg() |>
     set_engine("lm") |>
-    fit(wealth.worth.in.billions ~ demographics.age, data = variable_filter) |>
+    fit(wealth.worth.in.billions ~ demographics.age, data = billion2001) |>
     tidy()
  
- variable_filter |>
+billion2001 |>
     ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
     geom_point() +
     geom_smooth(method = "lm", se = F) 
  
+#regression by age for inherited
 linear_reg() |>
     set_engine("lm") |>
     fit(wealth.worth.in.billions ~ demographics.age, data = yes_inherited) |>
@@ -154,7 +197,8 @@ linear_reg() |>
     geom_point() +
     geom_smooth(method = "lm", se = F) 
  
-linear_reg() |>
+#regression by age for not inherited
+ linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ demographics.age, data = not_inherited) |>
   tidy()
@@ -164,3 +208,29 @@ not_inherited |>
   geom_point() +
   geom_smooth(method = "lm", se = F) 
 ```
+
+## Changelog
+
+4/3:
+
+-   filtered year and variables (variable_filter)
+
+-   grouped by inheritance (inheritance_grouping, yes_inherited, not_inherited)
+
+-   regressions by location, age, sector; univariate models from total, then individual group data frames
+
+4/5:
+
+-   renamed variable_filter to billion2001, renamed wealth.how.industry to industry
+
+-   removed selecting variables (aka leaving all variables in)
+
+-   added comments
+
+-   commented out glimpse(billion2001)
+
+-   cleaned up and combined industry levels (check underneath for groupings)
+
+-   changed regression by company.sector to regression by industry
+
+-   
