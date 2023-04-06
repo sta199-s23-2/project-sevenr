@@ -19,12 +19,19 @@ library(tidymodels)
 ```{r}
 #| label: load-billion
 billion <- read.csv("data/billionaires.csv")
+
 glimpse(billion)
 ```
 
+The dataset we are working with is a large listing of billionaires across the world along with information about them collected at three different time points. There are 2614 observations and 22 variables. Not every observation is a unique billionaire; many are repeated up to three times (one at each time point). In addition, not every 22 variable is statistically interesting; many, such as name, rank, and company.name are identifying variables. However, the other variables are statistically useful and interesting, and our goal is to investigate them.
+
+The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.
+
+One caveat about this dataset, and any data categorizing wealth, is that wealth is subjective. For example, Forbes made many choices in determining who to include in their lists which were used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods.
+
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
-Source, topic, when, how, cases, relevant variables
+, how, cases, relevant variables
 
 Ethical concerns?
 
@@ -41,7 +48,6 @@ billion |>
 
 billion2001 <- billion |>
   filter(year == 2001) |>
-  rename(industry = wealth.how.industry)
 ```
 
 Multivariate linear regression.
