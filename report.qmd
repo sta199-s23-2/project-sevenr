@@ -27,14 +27,14 @@ The dataset we are working with is a large listing of billionaires across the wo
 
 The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.
 
-One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitial billionaires to any person on the planet who accumulates wealth.
+One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitical billionaires to any person on the planet who accumulates wealth.
 
 #### Relevant variables
 
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified)               | Meaning                                                                        |
-|-------------------------|-----------------------------------------------|
+|-------------------------|----------------------------------------------|
 | company.relationship                     | relationship to the company (founder, etc.)                                    |
 | company.sector                           | the sector of the economy to which the business belongs                        |
 | company.type                             | type of business of the company                                                |
@@ -69,6 +69,7 @@ One step was to filter for a single year instead of working with data over time.
 
 ```{r}
 #| label: filter-2001
+
 billion |> 
   group_by(year) |> 
   summarize(mean_gdp = mean(location.gdp))
@@ -171,13 +172,14 @@ The use of linear regression models help us answer our research question because
 
 ```{r}
 #| label: grouping by inheritance
-inheritance_grouping <- billion2001 |>
+
+billion2001 <- billion2001 |>
   mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"))
 
-yes_inherited <- inheritance_grouping |>
+yes_inherited <- billion2001 |>
   filter(inherited == "inherited")
 
-not_inherited <- inheritance_grouping |>
+not_inherited <- billion2001 |>
   filter(inherited == "not inherited")
 ```
 
@@ -194,7 +196,7 @@ billion2001 |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
-  labs(title = "What is the Relationship between Location GDP and Wealth for Billionaires?",
+  labs(title = "Relationship between Location GDP and Wealth for Billionaires",
        x = "Location GDP",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 10))
@@ -209,7 +211,7 @@ yes_inherited |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
-  labs(title = "What is the Relationship between Location GDP and Wealth for Billionaires who Inherited Money?",
+  labs(title = "Relationship between Country GDP and Wealth for Inherited Billionaires",
        x = "Location GDP",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 10))
@@ -224,7 +226,7 @@ not_inherited |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
-  labs(title = "What is the Relationship between Location GDP and Wealth for Self-Made Billionaires?",
+  labs(title = "Relationship between Country GDP and Wealth for Non-inherited Billionaires",
        x = "Location GDP",
        y = "Wealth (in billions of dollars)")  +
   theme(text = element_text(size = 10))
@@ -285,7 +287,7 @@ billion2001 |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
-  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who Inherited Money?",
+  labs(title = "Relationship between Industry Type and Wealth for Billionaires",
        x = "Industry Type",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 8))
@@ -300,7 +302,7 @@ yes_inherited |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
-  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who Inherited Money?",
+  labs(title = "Relationship between Industry Type and Wealth for Inherited Billionaires",
        x = "Industry Type",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 8))
@@ -315,7 +317,7 @@ not_inherited |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
-  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who did not Inherit Money?",
+  labs(title = "Relationship between Industry Type and Wealth for Non-inherited Billionaires",
        x = "Industry Type",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 7))
@@ -408,7 +410,7 @@ billion2001 |>
     ggplot(aes(x = age, y = wealth.worth.in.billions)) +
     geom_point() +
     geom_smooth(method = "lm", se = F) +
-  labs(title = "What is the Relationship between Age and Wealth for Billionaires?",
+  labs(title = "Relationship between Age and Wealth for Billionaires",
        x = "Age (years)",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 10))
@@ -423,7 +425,7 @@ linear_reg() |>
     ggplot(aes(x = age, y = wealth.worth.in.billions)) +
     geom_point() +
     geom_smooth(method = "lm", se = F) +
-  labs(title = "What is the Relationship between Age and Wealth for Billionaires who Inherited Money?",
+  labs(title = "Relationship between Age and Wealth for Inherited Billionaires",
        x = "Age (years)",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 10))
@@ -438,7 +440,7 @@ not_inherited |>
   ggplot(aes(x = age, y = wealth.worth.in.billions)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
-  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who did not Inherit Money?",
+  labs(title = "Relationship between Age and Wealth for Non-inherited Billionaires",
        x = "Age (years)",
        y = "Wealth (in billions of dollars)") +
   theme(text = element_text(size = 8))
@@ -489,18 +491,22 @@ $$
 **Multivariate Linear Regression**
 
 ```{r}
-#| label: multivarite-inherited
+#| label: multivariate-inherited
 
-inher<- linear_reg() |>
+inher <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = yes_inherited) 
 
+glance(inher)$r.squared
+glance(inher)$adj.r.squared
 glance(inher)$AIC
 
-notinher<- linear_reg() |>
+notinher <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = not_inherited) 
 
+glance(notinher)$r.squared
+glance(notinher)$adj.r.squared
 glance(notinher)$AIC
 ```
 
@@ -510,13 +516,17 @@ This model helps to answer the research question by utilizing fit statistics to 
 
 ```{r}
 #| label: inherited-histogram
+#| message: false
 
 billion2001 |>
-  mutate(wealthclean = ifelse(wealth.how.inherited == "not inherited", "Not Inherited", "Inherited"))|>
-  filter(wealth.how.category!=0)|>
-  ggplot(aes(x= wealth.worth.in.billions, fill = wealth.how.category))+
-  geom_histogram()+
-  facet_wrap(vars(wealthclean))
+  ggplot(aes(x= wealth.worth.in.billions, fill = industry)) +
+  geom_histogram() +
+  facet_wrap(~inherited, ncol = 1) +
+  labs(title = "Billionaire Worth based on Company Industry for both
+              Inherited and Non-inherited Billionaires",
+       x = "Wealth (billions of dollars)",
+       y = "Count",
+       fill = "Company Industry")
 
 ```
 
