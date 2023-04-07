@@ -323,8 +323,6 @@ not_inherited |>
   theme(text = element_text(size = 7))
 ```
 
-DONT KNOW HOW INDUSTRY SLOPE WORKS
-
 For all Billionaires:
 
 $$
@@ -495,7 +493,7 @@ $$
 
 inher <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = yes_inherited) 
+  fit(wealth.worth.in.billions ~  location.gdp * age * industry, data = yes_inherited) 
 
 glance(inher)$r.squared
 glance(inher)$adj.r.squared
@@ -503,14 +501,14 @@ glance(inher)$AIC
 
 notinher <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = not_inherited) 
+  fit(wealth.worth.in.billions ~  location.gdp * age * industry, data = not_inherited) 
 
 glance(notinher)$r.squared
 glance(notinher)$adj.r.squared
 glance(notinher)$AIC
 ```
 
-This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to minimize the AIC, a statistic that represents the fit of the model. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was these variables. The resulting AIC for the inherited model was THIS. For billionaires that are self made, the optimal combination of explanatory variables was THIS which resulted in an AIC of THIS.
+This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to minimize the AIC, a statistic that represents the fit of the model. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was location.gdp, age, and industry. This resulted in a $R^2$ of 0.24, an adjusted $R^2$ of 0.10, and an AIC of 969. For billionaires that are self made, the optimal combination of explanatory variables was also location.gdp, age, and industry which resulted in a $R^2$ of 0.09, an adjusted $R^2$ of -0.04, and an AIC of 1523.
 
 **Histogram Split by Inheritance Status**
 
@@ -530,15 +528,9 @@ billion2001 |>
 
 ```
 
-//summary statistics and why we did this
-
 ## Results
 
-TALK ABOUT WHAT YOU GOT FROM PROBABILITIES AND MODELS TO ANSWER RESEARCH QUESTION:
-
-"do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
-
-Summary statistics:
+Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire's country's GDP, the billionaire's age, and the industry of the billionaire's company. With that being said, even though these were the best predictors, they only yielded an $R^2$ of 0.24 and an adjusted $R^2$ of 0.10 for inherited billionaires and an $R^2$ of 0.09 and an adjusted $R^2$ of -0.04 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire's worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.
 
 ## Changelog
 
