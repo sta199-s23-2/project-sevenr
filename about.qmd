@@ -9,5 +9,6 @@ This project was developed by **\[sevenr\]** For [STA 199: Introduction to Data 
 -   Koji Bilbao: Neuroscience major and philosophy minor from Guam, Sophomore.
 -   Maya Markus-Malone: Freshman with a computer science major and creative writing minor from Connecticut.
 -   Michael Wang: Junior studying neuroscience with a music minor from Cary, NC.
+-   Scott Tremblay: Junior studying computer science from NJ.
 -   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
 -   ...
