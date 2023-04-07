@@ -326,7 +326,17 @@ DONT KNOW HOW INDUSTRY SLOPE WORKS
 For all Billionaires:
 
 $$
-wealth\_in\_billions\ = IDK* industry + 3.97
+wealth\_in\_billions\ =   
+.207*technology - 1.89*other  + -1.36*non_consumer 
+$$
+
+$$
+-1.304*real_estate_construction - 
+1.21*money-management - .34*media
+$$
+
+$$
+ - 1.81*energy-mining-metals +3.97
 $$
 
 $$
@@ -340,7 +350,17 @@ $$
 For Billionaires who inherited their wealth:
 
 $$
-wealth\_in\_billions\ = IDK*industry + 4.69
+wealth\_in\_billions\ =   
+.207*technology - 1.89*other  + -1.36*non_consumer 
+$$
+
+$$
+-1.304*real_estate_construction - 
+1.21*money-management - .34*media
+$$
+
+$$
+ - 1.81*energy-mining-metals +3.97
 $$
 
 $$
@@ -354,7 +374,17 @@ $$
 For Billionaires who did not inherit their wealth:
 
 $$
-wealth\_in\_billions\ = IDK*industry + 3.25
+wealth\_in\_billions\ =   
+.207*technology - 1.89*other  + -1.36*non_consumer
+$$
+
+$$
+-1.304*real_estate_construction - 
+1.21*money-management - .34*media
+$$
+
+$$
+ - 1.81*energy-mining-metals +3.97
 $$
 
 $$
@@ -474,7 +504,7 @@ notinher<- linear_reg() |>
 glance(notinher)$AIC
 ```
 
-This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to minimize the AIC, a statistic that represents the fit of the model. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was THIS. The resulting AIC for the inherited model was THIS. For billionaires that are self made, the optimal combination of explanatory variables was THIS which resulted in an AIC of THIS.
+This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to minimize the AIC, a statistic that represents the fit of the model. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was these variables. The resulting AIC for the inherited model was THIS. For billionaires that are self made, the optimal combination of explanatory variables was THIS which resulted in an AIC of THIS.
 
 **Histogram Split by Inheritance Status**
 
