@@ -121,6 +121,15 @@ billion2001 <- billion2001 |>
   )
 ```
 
+How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, and investor, with founder taking precedent over CEO, and CEO over the joint category of chairman/investor/owner.
+
+```{r}
+#| label: clean-relationship
+
+bllion2001 <- billion2001 |>
+  
+```
+
 comapny.relation
 
 company.founded
