@@ -121,12 +121,17 @@ billion2001 <- billion2001 |>
   )
 ```
 
-How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, and investor, with founder taking precedent over CEO, and CEO over the joint category of chairman/investor/owner.
+How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation.
 
 ```{r}
 #| label: clean-relationship
 
-bllion2001 <- billion2001 |>
+billion2001 <- billion2001 |>
+  rename(company.relation = company.relationship) |>
+  mutate(company.relation = case_when(str_detect(company.relation, "founder") ~ "founder",
+                                      str_detect(company.relation, "CEO") ~ "ceo",
+                                      TRUE ~ company.relation)
+                                      )
   
 ```
 
