@@ -6,8 +6,8 @@ editor: visual
 
 This project was developed by **\[sevenr\]** For [STA 199: Introduction to Data Science](https://sta199-s23-2.github.io/) at Duke University. The team is comprised of the following team members.
 
--   Koji Bilbao: Neuroscience major and philosophy minor from Guam
--   Team member 2: One sentence description of Team member 2 (e.g., year, major, etc.).
--   Team member 3: One sentence description of Team member 3 (e.g., year, major, etc.).
+-   Koji Bilbao: Neuroscience major and philosophy minor from Guam, Sophomore.
+-   Maya Markus-Malone: Freshman with a computer science major and creative writing minor from Connecticut.
+-   Michael Wang: Junior studying neuroscience with a music minor from Cary, NC.
 -   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
 -   ...

@@ -4,7 +4,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Koji Bilbao: Neuroscience major and philosophy minor from Guam\nTeam member 2: One sentence description of Team member 2 (e.g., year, major, etc.).\nTeam member 3: One sentence description of Team member 3 (e.g., year, major, etc.).\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
+    "text": "Koji Bilbao: Neuroscience major and philosophy minor from Guam, Sophomore.\nMaya Markus-Malone: Freshman with a computer science major and creative writing minor from Connecticut.\nMichael Wang: Junior studying neuroscience with a music minor from Cary, NC.\nTeam member 4: One sentence description of Team member 4 (e.g., year, major, etc.).\n…"
   },
   {
     "objectID": "index.html",
@@ -107,22 +107,29 @@
   {
     "objectID": "report.html",
     "href": "report.html",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "",
-    "text": "Add project writeup here."
+    "text": "library(tidyverse)\nlibrary(tidymodels)"
   },
   {
     "objectID": "report.html#methodology",
     "href": "report.html#methodology",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "Methodology",
-    "text": "Methodology"
+    "text": "Methodology\nMultivariate linear regression.\nDataset cleaning (lots of 0s for some reason)\nModel building\nOther tools"
   },
   {
     "objectID": "report.html#results",
     "href": "report.html#results",
-    "title": "Project title",
+    "title": "Sevenr Project",
     "section": "Results",
-    "text": "Results"
+    "text": "Results\nTALK ABOUT WHAT YOU GOT FROM PROBABILITIES AND MODELS TO ANSWER RESEARCH QUESTION:\n“do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?” That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?\nSummary statistics:"
+  },
+  {
+    "objectID": "report.html#changelog",
+    "href": "report.html#changelog",
+    "title": "Sevenr Project",
+    "section": "Changelog",
+    "text": "Changelog\n4/3:\n\nfiltered year and variables (variable_filter)\ngrouped by inheritance (inheritance_grouping, yes_inherited, not_inherited)\nregressions by location, age, sector; univariate models from total, then individual group data frames\n\n4/5:\n\nrenamed variable_filter to billion2001, renamed wealth.how.industry to industry\nremoved selecting variables (aka leaving all variables in)\nadded comments\ncommented out glimpse(billion)\ncleaned up and combined industry levels (check underneath for groupings)\nchanged regression by company.sector to regression by industry\n\n4/7:\n\nhistogram model added and explained\nstatistics from model added to results portion"
   }
 ]
