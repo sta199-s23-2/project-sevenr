@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified)               | Meaning                                                                        |
-|-------------------------|-----------------------------------------------|
+|-------------------------|----------------------------------------------|
 | company.relationship                     | relationship to the company (founder, etc.)                                    |
 | company.sector                           | the sector of the economy to which the business belongs                        |
 | company.type                             | type of business of the company                                                |
@@ -165,15 +165,9 @@ glimpse(billion2001)
 
 #### Methods
 
-Multivariate linear regression.
+**Linear Regression Models**
 
-Model building
-
-Other tools
-
-## Results
-
-Two (or more) linear regression models
+The use of linear regression models help us answer our research question because they show the strength of different explanatory variables in contributing to overall wealth. We can see how the strength differs in the group of billionaires who inherited their wealth versus the self-made billionaires. This helps us to find if the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not.
 
 ```{r}
 #| label: grouping by inheritance
@@ -199,10 +193,14 @@ linear_reg() |>
 billion2001 |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "What is the Relationship between Location GDP and Wealth for Billionaires?",
+       x = "Location GDP",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 10))
  
 #regression for location.gdp for inherited
-linear_reg() |>
+ linear_reg() |>
   set_engine("lm") |>
   fit(wealth.worth.in.billions ~ location.gdp, data = yes_inherited) |>
   tidy()
@@ -210,7 +208,11 @@ linear_reg() |>
 yes_inherited |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F)  +
+  labs(title = "What is the Relationship between Location GDP and Wealth for Billionaires who Inherited Money?",
+       x = "Location GDP",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 10))
 
 #regression for location.gdp for not inherited
 linear_reg() |>
@@ -221,8 +223,54 @@ linear_reg() |>
 not_inherited |>
   ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F)  +
+  labs(title = "What is the Relationship between Location GDP and Wealth for Self-Made Billionaires?",
+       x = "Location GDP",
+       y = "Wealth (in billions of dollars)")  +
+  theme(text = element_text(size = 10))
 ```
+
+For all Billionaires:
+
+$$
+wealth\_in\_billions\ = 5.36*10^-14* location\_gdp + 3.105
+$$
+
+$$
+adjusted\_r^2 = 0.0004839317
+$$
+
+$$
+AIC = 2470.14
+$$
+
+For Billionaires who inherited their wealth:
+
+$$
+wealth\_in\_billions\ = 6.59*10^-14*location\_gdp + 3.28
+$$
+
+$$
+adjusted\_r^2 = 0.001188114
+$$
+
+$$
+AIC = 964.0363
+$$
+
+For Billionaires who did not inherit their wealth:
+
+$$
+wealth\_in\_billions\ = 5.35*10^-14*location\_gdp + 2.93
+$$
+
+$$
+adjusted\_r^2 = -0.001972628
+$$
+
+$$
+AIC = 1488.223
+$$
 
 ```{r}
 #| label: industry-regression
@@ -236,7 +284,11 @@ linear_reg() |>
 billion2001 |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F)  +
+  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who Inherited Money?",
+       x = "Industry Type",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 8))
  
 #regression by industry for inherited
 linear_reg() |>
@@ -247,7 +299,11 @@ linear_reg() |>
 yes_inherited |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F)  +
+  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who Inherited Money?",
+       x = "Industry Type",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 8))
  
 #regression by industry for not inherited
 linear_reg() |>
@@ -258,8 +314,56 @@ linear_reg() |>
 not_inherited |>
   ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F)  +
+  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who did not Inherit Money?",
+       x = "Industry Type",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 7))
 ```
+
+DONT KNOW HOW INDUSTRY SLOPE WORKS
+
+For all Billionaires:
+
+$$
+wealth\_in\_billions\ = IDK* industry + 3.97
+$$
+
+$$
+adjusted\_r^2 = 0.0189506
+$$
+
+$$
+AIC = 2468.364
+$$
+
+For Billionaires who inherited their wealth:
+
+$$
+wealth\_in\_billions\ = IDK*industry + 4.69
+$$
+
+$$
+adjusted\_r^2 = 0.05150269
+$$
+
+$$
+AIC = 959.9096
+$$
+
+For Billionaires who did not inherit their wealth:
+
+$$
+wealth\_in\_billions\ = IDK*industry + 3.25
+$$
+
+$$
+adjusted\_r^2 = 0.004701796
+$$
+
+$$
+AIC = 1492.497
+$$
 
 ```{r}
 #| label: age-regression
@@ -267,36 +371,134 @@ not_inherited |>
 #regression by age for both groups
 linear_reg() |>
     set_engine("lm") |>
-    fit(wealth.worth.in.billions ~ demographics.age, data = billion2001) |>
-    tidy()
+    fit(wealth.worth.in.billions ~ age, data = billion2001) |>
+  tidy()
  
 billion2001 |>
-    ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+    ggplot(aes(x = age, y = wealth.worth.in.billions)) +
     geom_point() +
-    geom_smooth(method = "lm", se = F) 
+    geom_smooth(method = "lm", se = F) +
+  labs(title = "What is the Relationship between Age and Wealth for Billionaires?",
+       x = "Age (years)",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 10))
  
 #regression by age for inherited
 linear_reg() |>
     set_engine("lm") |>
-    fit(wealth.worth.in.billions ~ demographics.age, data = yes_inherited) |>
-    tidy()
+    fit(wealth.worth.in.billions ~ age, data = yes_inherited) |>
+  tidy()
  
  yes_inherited |>
-    ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+    ggplot(aes(x = age, y = wealth.worth.in.billions)) +
     geom_point() +
-    geom_smooth(method = "lm", se = F) 
+    geom_smooth(method = "lm", se = F) +
+  labs(title = "What is the Relationship between Age and Wealth for Billionaires who Inherited Money?",
+       x = "Age (years)",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 10))
  
 #regression by age for not inherited
- linear_reg() |>
+linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ demographics.age, data = not_inherited) |>
+  fit(wealth.worth.in.billions ~ age, data = not_inherited) |>
   tidy()
  
 not_inherited |>
-  ggplot(aes(x = demographics.age, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = age, y = wealth.worth.in.billions)) +
   geom_point() +
-  geom_smooth(method = "lm", se = F) 
+  geom_smooth(method = "lm", se = F) +
+  labs(title = "What is the Relationship between Industry Type and Wealth for Billionaires who did not Inherit Money?",
+       x = "Age (years)",
+       y = "Wealth (in billions of dollars)") +
+  theme(text = element_text(size = 8))
 ```
+
+For all Billionaires:
+
+$$
+wealth\_in\_billions\ = -0.0057*age + 3.79
+$$
+
+$$
+adjusted\_r^2 = -0.00220548
+$$
+
+$$
+AIC = 2471.249
+$$
+
+For Billionaires who inherited their wealth:
+
+$$
+wealth\_in\_billions\ = 0.04*age + 0.98
+$$
+
+$$
+adjusted\_r^2 = 0.01515218
+$$
+
+$$
+AIC = 961.5865
+$$
+
+For Billionaires who did not inherit their wealth:
+
+$$
+wealth\_in\_billions\ = -0.04*age + 5.73
+$$
+
+$$
+adjusted\_r^2 = 0.004316155
+$$
+
+$$
+AIC = 1486.718
+$$
+
+**Multivariate Linear Regression**
+
+```{r}
+#| label: multivarite-inherited
+
+inher<- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = yes_inherited) 
+
+glance(inher)$AIC
+
+notinher<- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth.worth.in.billions ~ location.gdp * age * industry, data = not_inherited) 
+
+glance(notinher)$AIC
+```
+
+This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using BLANK, we adjusted the explanatory variables to minimize the AIC, a statistic that represents the fit of the model. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was THIS. The resulting AIC for the inherited model was THIS. For billionaires that are self made, the optimal combination of explanatory variables was THIS which resulted in an AIC of THIS.
+
+**Histogram Split by Inheritance Status**
+
+```{r}
+#| label: inherited-histogram
+
+billion2001 |>
+  mutate(wealthclean = ifelse(wealth.how.inherited == "not inherited", "Not Inherited", "Inherited"))|>
+  filter(wealth.how.category!=0)|>
+  ggplot(aes(x= wealth.worth.in.billions, fill = wealth.how.category))+
+  geom_histogram()+
+  facet_wrap(vars(wealthclean))
+
+```
+
+//summary statistics and why we did this
+
+## Results
+
+TALK ABOUT WHAT YOU GOT FROM PROBABILITIES AND MODELS TO ANSWER RESEARCH QUESTION:
+
+"do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
+
+Summary statistics:
 
 ## Changelog
 
@@ -321,5 +523,11 @@ not_inherited |>
 -   cleaned up and combined industry levels (check underneath for groupings)
 
 -   changed regression by company.sector to regression by industry
+
+4/7:
+
+-   histogram model added and explained
+
+-   statistics from model added to results portion
 
 -   
