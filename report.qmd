@@ -14,7 +14,7 @@ library(tidyverse)
 library(tidymodels)
 ```
 
-## Introduction and data
+# Introduction and data
 
 ```{r}
 #| label: load-billion
@@ -28,6 +28,8 @@ The dataset we are working with is a large listing of billionaires across the wo
 The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.
 
 One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitial billionaires to any person on the planet who accumulates wealth.
+
+#### Relevant variables
 
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
@@ -43,13 +45,13 @@ As mentioned, there are 22 variables, of which some are identifying variables, a
 | location.region                          | part of the world where the individual lives                                   |
 | [*wealth.worth.in.billions*]{.underline} | [*net worth of the individual in billions of USD*]{.underline}                 |
 | wealth.how.category                      | where the individual's money came from                                         |
-| wealth.how.from.emerging                 | whether the individual's money came from emerging markets                      |
 | wealth.how.industry                      | the specific industry the individual profited from                             |
 | wealth.how.inherited                     | whether the individual's wealth was inherited or not                           |
 | wealth.how.was.founder                   | whether the individual founded their company or not                            |
-| wealth.how.was.political                 | whether the individual's money came from politics or not                       |
 
 Of these variables, the wealth.worth.in.billions variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
+
+#### Research question and hypothesis
 
 Thus, our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
 
@@ -57,33 +59,31 @@ Our hypothesis is that there will be a difference between the model for inherite
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
-## Methodology
+# Methodology
+
+#### Data cleaning
+
+Before any analysis, the dataset was tidied up.
+
+One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014).
 
 ```{r}
+#| label: filter-2001
 billion |> 
   group_by(year) |> 
   summarize(mean_gdp = mean(location.gdp))
 
 billion2001 <- billion |>
-  filter(year == 2001) |>
+  filter(year == 2001) 
 ```
 
-Multivariate linear regression.
-
-Dataset cleaning (lots of 0s for some reason)
-
-Model building
-
-Other tools
-
-## Results
-
-Two (or more) linear regression models
+Another variable that is of interest is wealth.how.industry, whose values are strings representing the industries that made the billionaires wealthy. First, we renamed the variable to industry. Then, after noticing that several industries are highly related, we combined them together. For example, "Venture capital", "Hedge funds", "Diversified financial", and "Private equity/leveraged buyout" all fit into the "Money management" industry.
 
 ```{r}
-#| label: data-cleaning
+#| label: clean-industry
 
 billion2001 <- billion2001 |>
+  rename(industry = wealth.how.industry) |>
   mutate(
     industry = if_else(industry == 0, "Other", industry),
     industry = if_else(industry == "Energy" | industry == "Mining and metals", "Energy, mining, and metals", industry),
@@ -98,6 +98,47 @@ billion2001 <- billion2001 |>
   )
 ```
 
+Are the billionaires old or young? demographics.age is another interesting variable; however, several billionaires have an age of 0 listed. We found out that several of the individuals with listed age 0 had died before 2001. Because researching dozens of individual death dates or ages demands excessive effort, we decided to filter out any age with 0 after renaming the variable to just 'age'.
+
+```{r}
+#| label: clean-age
+
+billion2001 <- billion2001 |>
+  rename(age = demographics.age) |>
+  filter(age != 0)
+```
+
+Company type may also be relevant to wealth accumulation. Thus, we tidied up company.type for use by merging misspelled or mistyped values. In the end, the three values are "new", "acquired", and "other", with "new" taking precedent over "acquired".
+
+```{r}
+#| label: clean-company.type
+
+billion2001 <- billion2001 |>
+  mutate(
+    company.type = case_when(str_detect(company.type, "new") ~ "new",
+                             str_detect(company.type, "quired") ~ "acquired",
+                             TRUE ~ "other")
+  )
+```
+
+comapny.relation
+
+company.founded
+
+#### Preliminary visualizations
+
+#### Methods
+
+Multivariate linear regression.
+
+Model building
+
+Other tools
+
+## Results
+
+Two (or more) linear regression models
+
 ```{r}
 #| label: grouping by inheritance
 inheritance_grouping <- billion2001 |>
@@ -109,24 +150,6 @@ yes_inherited <- inheritance_grouping |>
 not_inherited <- inheritance_grouping |>
   filter(inherited == "not inherited")
 ```
-
-other: 0
-
-construction
-
-consumer goods, retail, restaurant
-
-money management: diversified financial, hedge funds, venture capital, private equity/lev buyout
-
-energy: mining and metals
-
-media
-
-non consumer industrial
-
-real estate
-
-technology: computer, medical
 
 ```{r}
 #| label: location-regression
