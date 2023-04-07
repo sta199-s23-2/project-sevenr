@@ -27,17 +27,35 @@ The dataset we are working with is a large listing of billionaires across the wo
 
 The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.
 
-One caveat about this dataset, and any data categorizing wealth, is that wealth is subjective. For example, Forbes made many choices in determining who to include in their lists which were used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal billionaires to all wealthy people on the planet.
+One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitial billionaires to any person on the planet who accumulates wealth.
+
+As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
+
+| Variable name (unmodified)               | Meaning                                                                        |
+|------------------------------------------|--------------------------------------------------------------------------------|
+| company.relationship                     | relationship to the company (founder, etc.)                                    |
+| company.sector                           | the sector of the economy to which the business belongs                        |
+| company.type                             | type of business of the company                                                |
+| demographics.age                         | age of the individual                                                          |
+| location.citizenship                     | name of the country for which the individual has citizenship                   |
+| location.country.code                    | 3-letter country code for which the individual has citizenship                 |
+| location.gdp                             | gross domestic product of the country for which the individual has citizenship |
+| location.region                          | part of the world where the individual lives                                   |
+| [*wealth.worth.in.billions*]{.underline} | [*net worth of the individual in billions of USD*]{.underline}                 |
+| wealth.how.category                      | where the individual's money came from                                         |
+| wealth.how.from.emerging                 | whether the individual's money came from emerging markets                      |
+| wealth.how.industry                      | the specific industry the individual profited from                             |
+| wealth.how.inherited                     | whether the individual's wealth was inherited or not                           |
+| wealth.how.was.founder                   | whether the individual founded their company or not                            |
+| wealth.how.was.political                 | whether the individual's money came from politics or not                       |
+
+Of these variables, the wealth.worth.in.billions variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
+
+Thus, our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
+
+Our hypothesis is that there will be a difference between the model for inherited billionaires and the model for self-made billionaires. Which variables will or will not be included is rather unpredictable, as many factors may or may not play a true role in wealth accumulation. However, we predict that wealth.how.industry, which describes the industry sector, may be relevant, as it is generally well-known that technology is a rapidly growing sector.
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
-
-, how, cases, relevant variables
-
-Ethical concerns?
-
-Our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
-
-Our hypothesis is that ?
 
 ## Methodology
 
