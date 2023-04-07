@@ -51,6 +51,14 @@ As mentioned, there are 22 variables, of which some are identifying variables, a
 
 Of these variables, the wealth.worth.in.billions variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
 
+#### Literature Review
+
+<https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
+
+The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context. The countries/regions mentioned are Russia, Latin America, China, and India. The major project relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India's growing wealth, in reality people are growing poorer and poorer. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.
+
+The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world by asking a very similar question, but with all countries in the dataset in mind.
+
 #### Research question and hypothesis
 
 Thus, our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
@@ -517,7 +525,7 @@ This model helps to answer the research question by utilizing fit statistics to 
 #| message: false
 
 billion2001 |>
-  ggplot(aes(x= wealth.worth.in.billions, fill = industry)) +
+  ggplot(aes(x = wealth.worth.in.billions, fill = industry)) +
   geom_histogram() +
   facet_wrap(~inherited, ncol = 1) +
   labs(title = "Billionaire Worth based on Company Industry for both
@@ -528,9 +536,28 @@ billion2001 |>
 
 ```
 
+```{r}
+#| label: statistics
+
+yes_inherited |>
+  group_by(industry) |>
+  summarize(inherited = "inherited",
+            mean_wealth = mean(wealth.worth.in.billions),
+            count = n())
+
+not_inherited |>
+  group_by(industry) |>
+  summarize(inherited = "not inherited",
+            mean_wealth = mean(wealth.worth.in.billions),
+            count = n())
+
+```
+
 ## Results
 
 Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire's country's GDP, the billionaire's age, and the industry of the billionaire's company. With that being said, even though these were the best predictors, they only yielded an $R^2$ of 0.24 and an adjusted $R^2$ of 0.10 for inherited billionaires and an $R^2$ of 0.09 and an adjusted $R^2$ of -0.04 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire's worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.
+
+Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry, which is logical considering the tech industry is relatively new and filled with booming startups.
 
 ## Changelog
 
@@ -561,5 +588,11 @@ Based on our regression model, we can see that the optimal predictors of billion
 -   histogram model added and explained
 
 -   statistics from model added to results portion
+
+-   added literature review from proposal
+
+-   cleaned up graphs
+
+-   added results sections
 
 -   
