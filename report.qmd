@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified)               | Meaning                                                                        |
-|------------------------------------------|--------------------------------------------------------------------------------|
+|-------------------------|-----------------------------------------------|
 | company.relationship                     | relationship to the company (founder, etc.)                                    |
 | company.sector                           | the sector of the economy to which the business belongs                        |
 | company.type                             | type of business of the company                                                |
@@ -121,23 +121,45 @@ billion2001 <- billion2001 |>
   )
 ```
 
-How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation.
+How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation. President was collapsed into CEO, and employee and lawyer were collapsed into relation. Two observations where company relation is unknown were filtered out.
 
 ```{r}
 #| label: clean-relationship
 
 billion2001 <- billion2001 |>
   rename(company.relation = company.relationship) |>
-  mutate(company.relation = case_when(str_detect(company.relation, "founder") ~ "founder",
-                                      str_detect(company.relation, "CEO") ~ "ceo",
-                                      TRUE ~ company.relation)
-                                      )
-  
+  mutate(
+    company.relation = if_else(str_detect(company.relation, "founder"), "founder", company.relation),
+    company.relation = if_else(str_detect(company.relation, "president"), "ceo", company.relation),
+    company.relation = if_else(str_detect(company.relation, "CEO"), "ceo", company.relation),
+    company.relation = if_else(str_detect(company.relation, "Officer"), "ceo", company.relation),
+    company.relation = if_else(str_detect(company.relation, "man"), "chairman/investor/owner", company.relation),
+    company.relation = if_else(str_detect(company.relation, "investor"), "chairman/investor/owner", company.relation),
+    company.relation = if_else(str_detect(company.relation, "owner"), "chairman/investor/owner", company.relation),
+    company.relation = if_else(str_detect(company.relation, "lawer"), "relation", company.relation),
+    company.relation = if_else(str_detect(company.relation, "yee"), "relation", company.relation),
+    company.relation = if_else(str_detect(company.relation, "group"), "relation", company.relation)
+  ) |>
+  filter(nchar(company.relation) > 2)
 ```
 
-comapny.relation
+How old the company is may also give some insight. We calculated the age of the company by subtracting its founding year (from company.founded) from 2001, saving the results to a column named company.age. A single observation with 0 as a founding year was dropped.
 
-company.founded
+```{r}
+#| label: clean-founded
+
+billion2001 <- billion2001 |> 
+  filter(company.founded > 0) |>
+  mutate(company.age = 2001 - company.founded)
+```
+
+The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
+
+```{r}
+#| label: summary
+
+glimpse(billion2001)
+```
 
 #### Preliminary visualizations
 
