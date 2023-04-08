@@ -10,5 +10,4 @@ This project was developed by **\[sevenr\]** For [STA 199: Introduction to Data 
 -   Maya Markus-Malone: Freshman with a computer science major and creative writing minor from Connecticut.
 -   Michael Wang: Junior studying neuroscience with a music minor from Cary, NC.
 -   Scott Tremblay: Junior studying computer science from NJ.
--   Team member 4: One sentence description of Team member 4 (e.g., year, major, etc.).
--   ...
+-   Jacob Rosenzweig: Junior studying Classical Languages and Political Science from New York, NY.
