@@ -550,6 +550,7 @@ billion2001 |>
     y = "Inheritance Status"
   )
 
+#calculation for proportion of tech industry billionaires per group
 prop_tech_yi <- yes_inherited |>
   group_by(industry) |>
   filter(industry == "Technology")|>
@@ -557,16 +558,12 @@ prop_tech_yi <- yes_inherited |>
   select(prop_tech)|>
   as.numeric()
 
-prop_tech_yi
-
 prop_tech_ni <- not_inherited |>
  group_by(industry) |>
   filter(industry == "Technology")|>
   summarize(prop_tech = n()/nrow(not_inherited))|>
   select(prop_tech)|>
   as.numeric()
-
-prop_tech_ni
 
 ```
 
@@ -576,12 +573,14 @@ prop_tech_ni
 yes_inherited |>
   group_by(industry) |>
   summarize(mean_wealth = mean(wealth.worth.in.billions),
-            count = n())
+            count = n(),
+            percent_industry = (n()/nrow(yes_inherited))*100)
 
 not_inherited |>
   group_by(industry) |>
   summarize(mean_wealth = mean(wealth.worth.in.billions),
-            count = n())
+            count = n(),
+            percent_industry = (n()/nrow(not_inherited))*100)
 
 ```
 
@@ -589,7 +588,7 @@ not_inherited |>
 
 Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire's age and the industry of the billionaire's company. With that being said, even though these were the best predictors, they only yielded an $R^2$ of 0.19 and an adjusted $R^2$ of 0.12 for inherited billionaires and an $R^2$ of 0.05 and an adjusted $R^2$ of -0.02 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire's worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.
 
-Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That's about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurance stands to reason considering the tech industry is relatively new and filled with booming startups.
+Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That's about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurrence stands to reason considering the tech industry is relatively new and filled with booming startups.
 
 ## Changelog
 
@@ -626,3 +625,5 @@ Based on our histogram and analysis focusing on company industry, we can see tha
 -   cleaned up graphs
 
 -   added results sections
+
+-   added percent stacked bar chart

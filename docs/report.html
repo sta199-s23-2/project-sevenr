@@ -884,69 +884,63 @@ AIC = 1486.718
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>prop_tech_yi <span class="ot">&lt;-</span> yes_inherited <span class="sc">|&gt;</span></span>
-<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Technology"</span>)<span class="sc">|&gt;</span></span>
-<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prop_tech =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(yes_inherited))<span class="sc">|&gt;</span></span>
-<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prop_tech)<span class="sc">|&gt;</span></span>
-<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
-<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>prop_tech_yi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.05747126</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>prop_tech_ni <span class="ot">&lt;-</span> not_inherited <span class="sc">|&gt;</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Technology"</span>)<span class="sc">|&gt;</span></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prop_tech =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(not_inherited))<span class="sc">|&gt;</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prop_tech)<span class="sc">|&gt;</span></span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>prop_tech_ni</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1924686</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculation for proportion of tech industry billionaires per group</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>prop_tech_yi <span class="ot">&lt;-</span> yes_inherited <span class="sc">|&gt;</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Technology"</span>)<span class="sc">|&gt;</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prop_tech =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(yes_inherited))<span class="sc">|&gt;</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prop_tech)<span class="sc">|&gt;</span></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>prop_tech_ni <span class="ot">&lt;-</span> not_inherited <span class="sc">|&gt;</span></span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a> <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(industry <span class="sc">==</span> <span class="st">"Technology"</span>)<span class="sc">|&gt;</span></span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">prop_tech =</span> <span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(not_inherited))<span class="sc">|&gt;</span></span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(prop_tech)<span class="sc">|&gt;</span></span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>yes_inherited <span class="sc">|&gt;</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>yes_inherited <span class="sc">|&gt;</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">percent_industry =</span> (<span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(yes_inherited))<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 7 × 3
-  industry                            mean_wealth count
-  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;
-1 Consumer goods, retail, restaurants        4.70    59
-2 Energy, mining, and metals                 2.55    19
-3 Media                                      5.14    20
-4 Money management                           2.73    33
-5 Other                                      1.82     8
-6 Real estate, construction                  2.62    25
-7 Technology                                 3.61    10</code></pre>
+<pre><code># A tibble: 7 × 4
+  industry                            mean_wealth count percent_industry
+  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;            &lt;dbl&gt;
+1 Consumer goods, retail, restaurants        4.70    59            33.9 
+2 Energy, mining, and metals                 2.55    19            10.9 
+3 Media                                      5.14    20            11.5 
+4 Money management                           2.73    33            19.0 
+5 Other                                      1.82     8             4.60
+6 Real estate, construction                  2.62    25            14.4 
+7 Technology                                 3.61    10             5.75</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>not_inherited <span class="sc">|&gt;</span></span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>not_inherited <span class="sc">|&gt;</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">percent_industry =</span> (<span class="fu">n</span>()<span class="sc">/</span><span class="fu">nrow</span>(not_inherited))<span class="sc">*</span><span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 8 × 3
-  industry                            mean_wealth count
-  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;
-1 Consumer goods, retail, restaurants        3.25    60
-2 Energy, mining, and metals                 1.44    14
-3 Media                                      3.46    32
-4 Money management                           2.77    48
-5 Non-consumer industrial                    2.35     4
-6 Other                                      1.9      6
-7 Real estate, construction                  2.57    29
-8 Technology                                 5.05    46</code></pre>
+<pre><code># A tibble: 8 × 4
+  industry                            mean_wealth count percent_industry
+  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;            &lt;dbl&gt;
+1 Consumer goods, retail, restaurants        3.25    60            25.1 
+2 Energy, mining, and metals                 1.44    14             5.86
+3 Media                                      3.46    32            13.4 
+4 Money management                           2.77    48            20.1 
+5 Non-consumer industrial                    2.35     4             1.67
+6 Other                                      1.9      6             2.51
+7 Real estate, construction                  2.57    29            12.1 
+8 Technology                                 5.05    46            19.2 </code></pre>
 </div>
 </div>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
 <p>Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire’s age and the industry of the billionaire’s company. With that being said, even though these were the best predictors, they only yielded an <span class="math inline">\(R^2\)</span> of 0.19 and an adjusted <span class="math inline">\(R^2\)</span> of 0.12 for inherited billionaires and an <span class="math inline">\(R^2\)</span> of 0.05 and an adjusted <span class="math inline">\(R^2\)</span> of -0.02 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire’s worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.</p>
-<p>Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That’s about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurance stands to reason considering the tech industry is relatively new and filled with booming startups.</p>
+<p>Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That’s about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurrence stands to reason considering the tech industry is relatively new and filled with booming startups.</p>
 </section>
 <section id="changelog" class="level2">
 <h2 class="anchored" data-anchor-id="changelog">Changelog</h2>
@@ -972,6 +966,7 @@ AIC = 1486.718
 <li><p>added literature review from proposal</p></li>
 <li><p>cleaned up graphs</p></li>
 <li><p>added results sections</p></li>
+<li><p>added percent stacked bar chart</p></li>
 </ul>
 
 
