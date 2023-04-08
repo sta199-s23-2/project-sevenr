@@ -241,8 +241,8 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 <p>As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:</p>
 <table class="table">
 <colgroup>
-<col style="width: 34%">
-<col style="width: 65%">
+<col style="width: 36%">
+<col style="width: 63%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -853,7 +853,7 @@ AIC = 1486.718
 </div>
 </div>
 <p>This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to maximize adjusted <span class="math inline">\(R^2\)</span> and minimize the AIC, a statistic that evaluates the fit of the model based on the importance of the variables included. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was age and industry. This resulted in an adjusted <span class="math inline">\(R^2\)</span> of 0.12 and an AIC of 953. For billionaires that are self made, the optimal combination of explanatory variables was also age and industry which resulted in an adjusted <span class="math inline">\(R^2\)</span> of -0.01, and an AIC of 1505.</p>
-<p>Including country GDP in these models may have increased the <span class="math inline">\(R^2\)</span> values, but it decreased the adjusted <span class="math inline">\(R^2\)</span> values and increased AIC, suggesting that country GDP was not a valuable explanatory variable to add to the model.</p>
+<p>Including country GDP in these models may have increased the <span class="math inline">\(R^2\)</span> values, but it decreased the adjusted <span class="math inline">\(R^2\)</span> values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.</p>
 <p><strong>Histogram Split by Inheritance Status</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>billion2001 <span class="sc">|&gt;</span></span>
@@ -869,41 +869,55 @@ AIC = 1486.718
 <p><img src="report_files/figure-html/inherited-histogram-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p><strong>Stacked Bar Chart Representation</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>yes_inherited <span class="sc">|&gt;</span></span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">inherited =</span> <span class="st">"inherited"</span>,</span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 7 × 4
-  industry                            inherited mean_wealth count
-  &lt;chr&gt;                               &lt;chr&gt;           &lt;dbl&gt; &lt;int&gt;
-1 Consumer goods, retail, restaurants inherited        4.70    59
-2 Energy, mining, and metals          inherited        2.55    19
-3 Media                               inherited        5.14    20
-4 Money management                    inherited        2.73    33
-5 Other                               inherited        1.82     8
-6 Real estate, construction           inherited        2.62    25
-7 Technology                          inherited        3.61    10</code></pre>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>billion2001 <span class="sc">|&gt;</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> inherited, <span class="at">fill =</span> industry)) <span class="sc">+</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"count"</span>, <span class="at">position =</span> <span class="st">"fill"</span>) <span class="sc">+</span> </span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent)<span class="sc">|&gt;</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Percent Comparison of Inherited and Non-Inherited Billionaires </span></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="st">    Based on Industry"</span>,</span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Proportion of Billionaires"</span>,</span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Inheritance Status"</span></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="report_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>not_inherited <span class="sc">|&gt;</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">inherited =</span> <span class="st">"not inherited"</span>,</span>
-<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
-<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>yes_inherited <span class="sc">|&gt;</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 8 × 4
-  industry                            inherited     mean_wealth count
-  &lt;chr&gt;                               &lt;chr&gt;               &lt;dbl&gt; &lt;int&gt;
-1 Consumer goods, retail, restaurants not inherited        3.25    60
-2 Energy, mining, and metals          not inherited        1.44    14
-3 Media                               not inherited        3.46    32
-4 Money management                    not inherited        2.77    48
-5 Non-consumer industrial             not inherited        2.35     4
-6 Other                               not inherited        1.9      6
-7 Real estate, construction           not inherited        2.57    29
-8 Technology                          not inherited        5.05    46</code></pre>
+<pre><code># A tibble: 7 × 3
+  industry                            mean_wealth count
+  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;
+1 Consumer goods, retail, restaurants        4.70    59
+2 Energy, mining, and metals                 2.55    19
+3 Media                                      5.14    20
+4 Money management                           2.73    33
+5 Other                                      1.82     8
+6 Real estate, construction                  2.62    25
+7 Technology                                 3.61    10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>not_inherited <span class="sc">|&gt;</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(industry) <span class="sc">|&gt;</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_wealth =</span> <span class="fu">mean</span>(wealth.worth.in.billions),</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 3
+  industry                            mean_wealth count
+  &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;
+1 Consumer goods, retail, restaurants        3.25    60
+2 Energy, mining, and metals                 1.44    14
+3 Media                                      3.46    32
+4 Money management                           2.77    48
+5 Non-consumer industrial                    2.35     4
+6 Other                                      1.9      6
+7 Real estate, construction                  2.57    29
+8 Technology                                 5.05    46</code></pre>
 </div>
 </div>
 </section>
@@ -936,7 +950,6 @@ AIC = 1486.718
 <li><p>added literature review from proposal</p></li>
 <li><p>cleaned up graphs</p></li>
 <li><p>added results sections</p></li>
-<li></li>
 </ul>
 
 
