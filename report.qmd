@@ -73,7 +73,7 @@ Our hypothesis is that there will be a difference between the model for inherite
 
 Before any analysis, the dataset was tidied up.
 
-One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014).
+One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth.worth.in.billions was also renamed to just wealth.
 
 ```{r}
 #| label: filter-2001
@@ -83,10 +83,11 @@ billion |>
   summarize(mean_gdp = mean(location.gdp))
 
 billion2001 <- billion |>
-  filter(year == 2001) 
+  filter(year == 2001) |>
+  rename(wealth = wealth.worth.in.billions)
 ```
 
-Another variable that is of interest is wealth.how.industry, whose values are strings representing the industries that made the billionaires wealthy. First, we renamed the variable to industry. Then, after noticing that several industries are highly related, we combined them together. For example, "Venture capital", "Hedge funds", "Diversified financial", and "Private equity/leveraged buyout" all fit into the "Money management" industry.
+Another variable that is of interest is wealth.how.industry, whose values are strings representing the industries that made the billionaires wealthy. After renaming the variable, we combined related industries together. For example, "Venture capital", "Hedge funds", "Diversified financial", and "Private equity/leveraged buyout" all fit into the "Money management" industry.
 
 ```{r}
 #| label: clean-industry
@@ -107,7 +108,7 @@ billion2001 <- billion2001 |>
   )
 ```
 
-Are the billionaires old or young? demographics.age is another interesting variable; however, several billionaires have an age of 0 listed. We found out that several of the individuals with listed age 0 had died before 2001. Because researching dozens of individual death dates or ages demands excessive effort, we decided to filter out any age with 0 after renaming the variable to just 'age'.
+demographics.age is another interesting variable; however, several billionaires have an age of 0 listed, which meant some had died before 2001. Because researching dozens of individual death dates or ages demands excessive effort, we decided to filter out any age with 0.
 
 ```{r}
 #| label: clean-age
@@ -117,7 +118,7 @@ billion2001 <- billion2001 |>
   filter(age != 0)
 ```
 
-Company type may also be relevant to wealth accumulation. Thus, we tidied up company.type for use by merging misspelled or mistyped values. In the end, the three values are "new", "acquired", and "other", with "new" taking precedent over "acquired".
+We tidied up company.type for use by merging misspelled or mistyped values. In the end, the three values are "new", "acquired", and "other", with "new" taking precedent over "acquired".
 
 ```{r}
 #| label: clean-company.type
@@ -130,7 +131,7 @@ billion2001 <- billion2001 |>
   )
 ```
 
-How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We renamed the variable to company.relation and cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation. President was collapsed into CEO, and employee and lawyer were collapsed into relation. Two observations where company relation is unknown were filtered out.
+How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation. President was collapsed into CEO, and employee and lawyer were collapsed into relation. Two observations where company relation is unknown were filtered out.
 
 ```{r}
 #| label: clean-relationship
@@ -171,6 +172,21 @@ glimpse(billion2001)
 ```
 
 #### Preliminary visualizations
+
+Below is a histogram displaying the distribution of total wealth. The data skews right, suggesting that the majority of billionaires have less than 20 billion USD; not a small amount by any means, but also not the least.
+
+```{r}
+#| label: vis-wealth
+
+billion2001 |>
+  ggplot(aes(x = wealth)) +
+  geom_histogram(binwidth = 0.3, fill = "blue") +
+  labs(
+    x = "Wealth (in billions of USD)",
+    y = "Count of billionaires",
+    title = "Distribution of total wealth"
+  )
+```
 
 #### Methods
 
@@ -537,7 +553,9 @@ billion2001 |>
        fill = "Company Industry")
 
 ```
+
 **Stacked Bar Chart Representation**
+
 ```{r}
 billion2001 |>
   ggplot(aes(y = inherited, fill = industry)) +
