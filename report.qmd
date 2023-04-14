@@ -163,28 +163,35 @@ billion2001 <- billion2001 |>
   mutate(company.age = 2001 - company.founded)
 ```
 
-The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
+Finally, the variable inherited is changed to binary categorical variable. The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
 
 ```{r}
 #| label: summary
+
+billion2001 <- billion2001 |>
+  mutate(
+    inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"),
+    inherited = as.factor(inherited)
+    )
 
 glimpse(billion2001)
 ```
 
 #### Preliminary visualizations
 
-Below is a histogram displaying the distribution of total wealth. The data skews right, suggesting that the majority of billionaires have less than 20 billion USD; not a small amount by any means, but also not the least.
+Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most.
 
 ```{r}
 #| label: vis-wealth
 
 billion2001 |>
   ggplot(aes(x = wealth)) +
-  geom_histogram(binwidth = 0.3, fill = "blue") +
+  geom_histogram(binwidth = 0.3) +
+  facet_wrap(~inherited, ncol = 1) +
   labs(
     x = "Wealth (in billions of USD)",
     y = "Count of billionaires",
-    title = "Distribution of total wealth"
+    title = "Distribution of total wealth",
   )
 ```
 
@@ -196,9 +203,6 @@ The use of linear regression models help us answer our research question because
 
 ```{r}
 #| label: grouping by inheritance
-
-billion2001 <- billion2001 |>
-  mutate(inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"))
 
 yes_inherited <- billion2001 |>
   filter(inherited == "inherited")
@@ -347,7 +351,7 @@ not_inherited |>
   theme(text = element_text(size = 7))
 ```
 
-For all Billionaires:
+For all billionaires:
 
 $$
 wealth\_in\_billions\ =   
@@ -371,7 +375,7 @@ $$
 AIC = 2468.364
 $$
 
-For Billionaires who inherited their wealth:
+For billionaires who inherited their wealth:
 
 $$
 wealth\_in\_billions\ =   
@@ -395,7 +399,7 @@ $$
 AIC = 959.9096
 $$
 
-For Billionaires who did not inherit their wealth:
+For billionaires who did not inherit their wealth:
 
 $$
 wealth\_in\_billions\ =   
