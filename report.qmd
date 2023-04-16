@@ -33,23 +33,23 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
-| Variable name (unmodified)               | Meaning                                                                        |
-|--------------------------|----------------------------------------------|
-| company.relationship                     | relationship to the company (founder, etc.)                                    |
-| company.sector                           | the sector of the economy to which the business belongs                        |
-| company.type                             | type of business of the company                                                |
-| demographics.age                         | age of the individual                                                          |
-| location.citizenship                     | name of the country for which the individual has citizenship                   |
-| location.country.code                    | 3-letter country code for which the individual has citizenship                 |
-| location.gdp                             | gross domestic product of the country for which the individual has citizenship |
-| location.region                          | part of the world where the individual lives                                   |
-| [*wealth.worth.in.billions*]{.underline} | [*net worth of the individual in billions of USD*]{.underline}                 |
-| wealth.how.category                      | where the individual's money came from                                         |
-| wealth.how.industry                      | the specific industry the individual profited from                             |
-| wealth.how.inherited                     | whether the individual's wealth was inherited or not                           |
-| wealth.how.was.founder                   | whether the individual founded their company or not                            |
+| Variable name (unmodified) | Meaning                                                                        |
+|-------------------------|-----------------------------------------------|
+| company.relationship       | relationship to the company (founder, etc.)                                    |
+| company.sector             | the sector of the economy to which the business belongs                        |
+| company.type               | type of business of the company                                                |
+| demographics.age           | age of the individual                                                          |
+| location.citizenship       | name of the country for which the individual has citizenship                   |
+| location.country.code      | 3-letter country code for which the individual has citizenship                 |
+| location.gdp               | gross domestic product of the country for which the individual has citizenship |
+| location.region            | part of the world where the individual lives                                   |
+| [*wealth*]{.underline}     | [*net worth of the individual in billions of USD*]{.underline}                 |
+| wealth.how.category        | where the individual's money came from                                         |
+| wealth.how.industry        | the specific industry the individual profited from                             |
+| wealth.how.inherited       | whether the individual's wealth was inherited or not                           |
+| wealth.how.was.founder     | whether the individual founded their company or not                            |
 
-Of these variables, the wealth.worth.in.billions variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
+Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
 
 #### Literature Review
 
@@ -73,7 +73,7 @@ Our hypothesis is that there will be a difference between the model for inherite
 
 Before any analysis, the dataset was tidied up.
 
-One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth.worth.in.billions was also renamed to just wealth.
+One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth was also renamed to just wealth.
 
 ```{r}
 #| label: filter-2001
@@ -179,6 +179,22 @@ glimpse(billion2001)
 
 #### Preliminary visualizations
 
+Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference between the two groups does not seem too significant.
+
+```{r}
+#| label: vis-inherit
+
+billion2001 |>
+  ggplot(aes(x = inherited)) +
+  geom_bar(fill = "steelblue", color = "black") +
+  labs(
+    x = "Inheritance status",
+    y = "Number of billionaires",
+    title = "How many billionares inherit their wealth?"
+  )
+
+```
+
 Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most.
 
 ```{r}
@@ -186,7 +202,7 @@ Below is a histogram displaying the distribution of total wealth when faceted by
 
 billion2001 |>
   ggplot(aes(x = wealth)) +
-  geom_histogram(binwidth = 0.3) +
+  geom_histogram(binwidth = 0.3, color = "black", fill = "steelblue") +
   facet_wrap(~inherited, ncol = 1) +
   labs(
     x = "Wealth (in billions of USD)",
@@ -217,11 +233,11 @@ not_inherited <- billion2001 |>
 #regression by location.gdp for both groups
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp, data = billion2001) |>
+  fit(wealth ~ location.gdp, data = billion2001) |>
   tidy()
  
 billion2001 |>
-  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = location.gdp, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
   labs(title = "Relationship between Location GDP and Wealth for Billionaires",
@@ -232,11 +248,11 @@ billion2001 |>
 #regression for location.gdp for inherited
  linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp, data = yes_inherited) |>
+  fit(wealth ~ location.gdp, data = yes_inherited) |>
   tidy()
  
 yes_inherited |>
-  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = location.gdp, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
   labs(title = "Relationship between Country GDP and Wealth for Inherited Billionaires",
@@ -247,11 +263,11 @@ yes_inherited |>
 #regression for location.gdp for not inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ location.gdp, data = not_inherited) |>
+  fit(wealth ~ location.gdp, data = not_inherited) |>
   tidy()
  
 not_inherited |>
-  ggplot(aes(x = location.gdp, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = location.gdp, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
   labs(title = "Relationship between Country GDP and Wealth for Non-inherited Billionaires",
@@ -308,11 +324,11 @@ $$
 #regression by industry for both groups
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ industry, data = billion2001) |>
+  fit(wealth ~ industry, data = billion2001) |>
   tidy()
  
 billion2001 |>
-  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = industry, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
   labs(title = "Relationship between Industry Type and Wealth for Billionaires",
@@ -323,11 +339,11 @@ billion2001 |>
 #regression by industry for inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ industry, data = yes_inherited) |>
+  fit(wealth ~ industry, data = yes_inherited) |>
   tidy()
  
 yes_inherited |>
-  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = industry, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
   labs(title = "Relationship between Industry Type and Wealth for Inherited Billionaires",
@@ -338,11 +354,11 @@ yes_inherited |>
 #regression by industry for not inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ industry, data = not_inherited) |>
+  fit(wealth ~ industry, data = not_inherited) |>
   tidy()
  
 not_inherited |>
-  ggplot(aes(x = industry, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = industry, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F)  +
   labs(title = "Relationship between Industry Type and Wealth for Non-inherited Billionaires",
@@ -429,11 +445,11 @@ $$
 #regression by age for both groups
 linear_reg() |>
     set_engine("lm") |>
-    fit(wealth.worth.in.billions ~ age, data = billion2001) |>
+    fit(wealth ~ age, data = billion2001) |>
   tidy()
  
 billion2001 |>
-    ggplot(aes(x = age, y = wealth.worth.in.billions)) +
+    ggplot(aes(x = age, y = wealth)) +
     geom_point() +
     geom_smooth(method = "lm", se = F) +
   labs(title = "Relationship between Age and Wealth for Billionaires",
@@ -444,11 +460,11 @@ billion2001 |>
 #regression by age for inherited
 linear_reg() |>
     set_engine("lm") |>
-    fit(wealth.worth.in.billions ~ age, data = yes_inherited) |>
+    fit(wealth ~ age, data = yes_inherited) |>
   tidy()
  
  yes_inherited |>
-    ggplot(aes(x = age, y = wealth.worth.in.billions)) +
+    ggplot(aes(x = age, y = wealth)) +
     geom_point() +
     geom_smooth(method = "lm", se = F) +
   labs(title = "Relationship between Age and Wealth for Inherited Billionaires",
@@ -459,11 +475,11 @@ linear_reg() |>
 #regression by age for not inherited
 linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ age, data = not_inherited) |>
+  fit(wealth ~ age, data = not_inherited) |>
   tidy()
  
 not_inherited |>
-  ggplot(aes(x = age, y = wealth.worth.in.billions)) +
+  ggplot(aes(x = age, y = wealth)) +
   geom_point() +
   geom_smooth(method = "lm", se = F) +
   labs(title = "Relationship between Age and Wealth for Non-inherited Billionaires",
@@ -521,7 +537,7 @@ $$
 
 inher <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ age * industry, data = yes_inherited) 
+  fit(wealth ~ age * industry, data = yes_inherited) 
 
 glance(inher)$r.squared
 glance(inher)$adj.r.squared
@@ -529,7 +545,7 @@ glance(inher)$AIC
 
 notinher <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth.worth.in.billions ~ age * industry, data = not_inherited) 
+  fit(wealth ~ age * industry, data = not_inherited) 
 
 glance(notinher)$r.squared
 glance(notinher)$adj.r.squared
@@ -547,7 +563,7 @@ Including country GDP in these models may have increased the $R^2$ values, but i
 #| message: false
 
 billion2001 |>
-  ggplot(aes(x = wealth.worth.in.billions, fill = industry)) +
+  ggplot(aes(x = wealth, fill = industry)) +
   geom_histogram() +
   facet_wrap(~inherited, ncol = 1) +
   labs(title = "Billionaire Worth based on Company Industry for both
@@ -594,13 +610,13 @@ prop_tech_ni <- not_inherited |>
 
 yes_inherited |>
   group_by(industry) |>
-  summarize(mean_wealth = mean(wealth.worth.in.billions),
+  summarize(mean_wealth = mean(wealth),
             count = n(),
             percent_industry = (n()/nrow(yes_inherited))*100)
 
 not_inherited |>
   group_by(industry) |>
-  summarize(mean_wealth = mean(wealth.worth.in.billions),
+  summarize(mean_wealth = mean(wealth),
             count = n(),
             percent_industry = (n()/nrow(not_inherited))*100)
 
