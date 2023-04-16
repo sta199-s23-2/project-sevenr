@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|-------------------------|-----------------------------------------------|
+|----------------------------|--------------------------------------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -231,68 +231,21 @@ not_inherited <- billion2001 |>
 
 ```{r}
 #| label: location-regression
-
-#regression by location.gdp for both groups
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ location.gdp, data = billion2001) |>
-  tidy()
- 
-billion2001 |>
-  ggplot(aes(x = location.gdp, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F) +
-  labs(title = "Relationship between Location GDP and Wealth for Billionaires",
-       x = "Location GDP",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 10))
  
 #regression for location.gdp for inherited
  linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ location.gdp, data = yes_inherited) |>
   tidy()
- 
-yes_inherited |>
-  ggplot(aes(x = location.gdp, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)  +
-  labs(title = "Relationship between Country GDP and Wealth for Inherited Billionaires",
-       x = "Location GDP",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 10))
 
 #regression for location.gdp for not inherited
 linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ location.gdp, data = not_inherited) |>
   tidy()
- 
-not_inherited |>
-  ggplot(aes(x = location.gdp, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)  +
-  labs(title = "Relationship between Country GDP and Wealth for Non-inherited Billionaires",
-       x = "Location GDP",
-       y = "Wealth (in billions of dollars)")  +
-  theme(text = element_text(size = 10))
 ```
 
-For all Billionaires:
-
-$$
-wealth\_in\_billions\ = 5.36*10^-14* location\_gdp + 3.105
-$$
-
-$$
-adjusted\_r^2 = 0.0004839317
-$$
-
-$$
-AIC = 2470.14
-$$
-
-For Billionaires who inherited their wealth:
+For billionaires who inherited their wealth:
 
 $$
 wealth\_in\_billions\ = 6.59*10^-14*location\_gdp + 3.28
@@ -306,7 +259,7 @@ $$
 AIC = 964.0363
 $$
 
-For Billionaires who did not inherit their wealth:
+For billionaires who did not inherit their wealth:
 
 $$
 wealth\_in\_billions\ = 5.35*10^-14*location\_gdp + 2.93
@@ -322,21 +275,6 @@ $$
 
 ```{r}
 #| label: industry-regression
-
-#regression by industry for both groups
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ industry, data = billion2001) |>
-  tidy()
- 
-billion2001 |>
-  ggplot(aes(x = industry, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)  +
-  labs(title = "Relationship between Industry Type and Wealth for Billionaires",
-       x = "Industry Type",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 8))
  
 #regression by industry for inherited
 linear_reg() |>
@@ -344,54 +282,12 @@ linear_reg() |>
   fit(wealth ~ industry, data = yes_inherited) |>
   tidy()
  
-yes_inherited |>
-  ggplot(aes(x = industry, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)  +
-  labs(title = "Relationship between Industry Type and Wealth for Inherited Billionaires",
-       x = "Industry Type",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 8))
- 
 #regression by industry for not inherited
 linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ industry, data = not_inherited) |>
   tidy()
- 
-not_inherited |>
-  ggplot(aes(x = industry, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F)  +
-  labs(title = "Relationship between Industry Type and Wealth for Non-inherited Billionaires",
-       x = "Industry Type",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 7))
 ```
-
-For all billionaires:
-
-$$
-wealth\_in\_billions\ =   
-.207*technology - 1.89*other  + -1.36*non_consumer 
-$$
-
-$$
--1.304*real_estate_construction - 
-1.21*money-management - .34*media
-$$
-
-$$
- - 1.81*energy-mining-metals +3.97
-$$
-
-$$
-adjusted\_r^2 = 0.0189506
-$$
-
-$$
-AIC = 2468.364
-$$
 
 For billionaires who inherited their wealth:
 
@@ -443,21 +339,6 @@ $$
 
 ```{r}
 #| label: age-regression
-
-#regression by age for both groups
-linear_reg() |>
-    set_engine("lm") |>
-    fit(wealth ~ age, data = billion2001) |>
-  tidy()
- 
-billion2001 |>
-    ggplot(aes(x = age, y = wealth)) +
-    geom_point() +
-    geom_smooth(method = "lm", se = F) +
-  labs(title = "Relationship between Age and Wealth for Billionaires",
-       x = "Age (years)",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 10))
  
 #regression by age for inherited
 linear_reg() |>
@@ -465,44 +346,12 @@ linear_reg() |>
     fit(wealth ~ age, data = yes_inherited) |>
   tidy()
  
- yes_inherited |>
-    ggplot(aes(x = age, y = wealth)) +
-    geom_point() +
-    geom_smooth(method = "lm", se = F) +
-  labs(title = "Relationship between Age and Wealth for Inherited Billionaires",
-       x = "Age (years)",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 10))
- 
 #regression by age for not inherited
 linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ age, data = not_inherited) |>
   tidy()
- 
-not_inherited |>
-  ggplot(aes(x = age, y = wealth)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = F) +
-  labs(title = "Relationship between Age and Wealth for Non-inherited Billionaires",
-       x = "Age (years)",
-       y = "Wealth (in billions of dollars)") +
-  theme(text = element_text(size = 8))
 ```
-
-For all Billionaires:
-
-$$
-wealth\_in\_billions\ = -0.0057*age + 3.79
-$$
-
-$$
-adjusted\_r^2 = -0.00220548
-$$
-
-$$
-AIC = 2471.249
-$$
 
 For Billionaires who inherited their wealth:
 
