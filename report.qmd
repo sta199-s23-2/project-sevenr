@@ -215,7 +215,9 @@ billion2001 |>
 
 **Linear Regression Models**
 
-The use of linear regression models help us answer our research question because they show the strength of different explanatory variables in contributing to overall wealth. We can see how the strength differs in the group of billionaires who inherited their wealth versus the self-made billionaires. This helps us to find if the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not.
+Linear regression is the principle method by which a response variable can be modeled by one or more explanatory variables. It is used in many contexts; here, we are interested in seeing which variables make up the best-fitting linear regression model that would allow us to accurately predict billionaire wealth.
+
+First, we split the data into two sets depending on inheritance.
 
 ```{r}
 #| label: grouping by inheritance
