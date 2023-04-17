@@ -453,7 +453,7 @@ This model helps to answer the research question by utilizing fit statistics to 
 
 Including country GDP in these models may have increased the $R^2$ values, but it decreased the adjusted $R^2$ values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.
 
-## Results
+# Results
 
 Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire's age and the industry of the billionaire's company. With that being said, even though these were the best predictors, they only yielded an $R^2$ of 0.19 and an adjusted $R^2$ of 0.12 for inherited billionaires and an $R^2$ of 0.05 and an adjusted $R^2$ of -0.02 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire's worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.
 
