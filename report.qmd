@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|----------------------------|--------------------------------------------------------------------------------|
+|---------------------|---------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -73,7 +73,7 @@ Our hypothesis is that there will be a difference between the model for inherite
 
 Before any analysis, the dataset was tidied up.
 
-One step was to filter for a single year instead of working with data over time. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth was also renamed to just wealth.
+We filtered for a single year instead of working with the data over time to avoid complications. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth was also renamed to just wealth.
 
 ```{r}
 #| label: filter-2001
@@ -170,7 +170,7 @@ Finally, the variable inherited is changed to binary categorical variable. The e
 
 billion2001 <- billion2001 |>
   mutate(
-    inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "not inherited", "inherited"),
+    inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "Not inherited", "Inherited"),
     inherited = as.factor(inherited)
     )
 
@@ -178,6 +178,18 @@ glimpse(billion2001)
 ```
 
 #### Preliminary visualizations
+
+The dataset is split into two for future use: one for billionaires who inherited their wealth, and one for those who didn't.
+
+```{r}
+#| label: group-by-inheritance
+
+yes_inherited <- billion2001 |>
+  filter(inherited == "Inherited")
+
+not_inherited <- billion2001 |>
+  filter(inherited == "Not inherited")
+```
 
 Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference between the two groups does not seem too significant.
 
@@ -211,23 +223,57 @@ billion2001 |>
   )
 ```
 
-#### Methods
-
-**Linear Regression Models**
-
-Linear regression is the principle method by which a response variable can be modeled by one or more explanatory variables. It is used in many contexts; here, we are interested in seeing which variables make up the best-fitting linear regression model that would allow us to accurately predict billionaire wealth.
-
-First, we split the data into two sets depending on inheritance.
+Next, we visualize the proportion of various company industries within each group as well as their frequencies. We can see that the proportions vary between the different groups.
 
 ```{r}
-#| label: grouping by inheritance
+#| label: industry-vis
+#| message: false
 
-yes_inherited <- billion2001 |>
-  filter(inherited == "inherited")
+billion2001 |>
+  ggplot(aes(y = inherited, fill = industry)) +
+  geom_bar(stat = "count", position = "fill") + 
+  scale_x_continuous(labels = scales::percent)|>
+  labs(
+    title = "Percent comparison of inherited and non-inherited billionaires 
+    based on industry",
+    x = "Proportion of billionaires",
+    y = "Inheritance status",
+    fill = "Company industry"
+    )
 
-not_inherited <- billion2001 |>
-  filter(inherited == "not inherited")
+billion2001 |>
+  ggplot(aes(x = wealth, fill = industry)) +
+  geom_histogram() +
+  facet_wrap(~inherited, ncol = 1) +
+  labs(title = "Billionaire worth based on company industry for both
+              inherited and non-inherited billionaires",
+       x = "Wealth (billions of dollars)",
+       y = "Count",
+       fill = "Company industry"
+       )
 ```
+
+The proportions and numbers are summarized below; again, they show that wealth varies between the industries.
+
+```{r}
+#| label: statistics
+
+yes_inherited |>
+  group_by(industry) |>
+  summarize(mean_wealth = mean(wealth),
+            count = n(),
+            percent_industry = (n()/nrow(yes_inherited))*100)
+
+not_inherited |>
+  group_by(industry) |>
+  summarize(mean_wealth = mean(wealth),
+            count = n(),
+            percent_industry = (n()/nrow(not_inherited))*100)
+```
+
+#### Methods
+
+Linear regression is the principle method by which a response variable can be modeled by one or more explanatory variables. It is used in many contexts; here, we are interested in seeing which variables make up the best-fitting linear regression model that would allow us to accurately predict billionaire wealth.
 
 ```{r}
 #| label: location-regression
@@ -344,7 +390,7 @@ $$
 linear_reg() |>
     set_engine("lm") |>
     fit(wealth ~ age, data = yes_inherited) |>
-  tidy()
+    tidy()
  
 #regression by age for not inherited
 linear_reg() |>
@@ -406,72 +452,6 @@ glance(notinher)$AIC
 This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to maximize adjusted $R^2$ and minimize the AIC, a statistic that evaluates the fit of the model based on the importance of the variables included. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was age and industry. This resulted in an adjusted $R^2$ of 0.12 and an AIC of 953. For billionaires that are self made, the optimal combination of explanatory variables was also age and industry which resulted in an adjusted $R^2$ of -0.01, and an AIC of 1505.
 
 Including country GDP in these models may have increased the $R^2$ values, but it decreased the adjusted $R^2$ values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.
-
-**Histogram Split by Inheritance Status**
-
-```{r}
-#| label: inherited-histogram
-#| message: false
-
-billion2001 |>
-  ggplot(aes(x = wealth, fill = industry)) +
-  geom_histogram() +
-  facet_wrap(~inherited, ncol = 1) +
-  labs(title = "Billionaire Worth based on Company Industry for both
-              Inherited and Non-inherited Billionaires",
-       x = "Wealth (billions of dollars)",
-       y = "Count",
-       fill = "Company Industry")
-
-```
-
-**Stacked Bar Chart Representation**
-
-```{r}
-billion2001 |>
-  ggplot(aes(y = inherited, fill = industry)) +
-  geom_bar(stat = "count", position = "fill") + 
-  scale_x_continuous(labels = scales::percent)|>
-  labs(
-    title = "Percent Comparison of Inherited and Non-Inherited Billionaires 
-    Based on Industry",
-    x = "Proportion of Billionaires",
-    y = "Inheritance Status"
-  )
-
-#calculation for proportion of tech industry billionaires per group
-prop_tech_yi <- yes_inherited |>
-  group_by(industry) |>
-  filter(industry == "Technology")|>
-  summarize(prop_tech = n()/nrow(yes_inherited))|>
-  select(prop_tech)|>
-  as.numeric()
-
-prop_tech_ni <- not_inherited |>
- group_by(industry) |>
-  filter(industry == "Technology")|>
-  summarize(prop_tech = n()/nrow(not_inherited))|>
-  select(prop_tech)|>
-  as.numeric()
-
-```
-
-```{r}
-#| label: statistics
-
-yes_inherited |>
-  group_by(industry) |>
-  summarize(mean_wealth = mean(wealth),
-            count = n(),
-            percent_industry = (n()/nrow(yes_inherited))*100)
-
-not_inherited |>
-  group_by(industry) |>
-  summarize(mean_wealth = mean(wealth),
-            count = n(),
-            percent_industry = (n()/nrow(not_inherited))*100)
-
-```
 
 ## Results
 
