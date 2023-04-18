@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|---------------------|---------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -271,7 +271,7 @@ not_inherited |>
             percent_industry = (n()/nrow(not_inherited))*100)
 ```
 
-#### Methods
+#### Linear regression
 
 Linear regression is the principle method by which a response variable can be modeled by one or more explanatory variables. It is used in many contexts; here, we are interested in seeing which variables make up the best-fitting linear regression model that would allow us to accurately predict billionaire wealth.
 
@@ -427,7 +427,7 @@ $$
 AIC = 1486.718
 $$
 
-**Multivariate Linear Regression**
+### **Multivariate Linear Regression**
 
 ```{r}
 #| label: multivariate-inherited
@@ -452,6 +452,53 @@ glance(notinher)$AIC
 This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to maximize adjusted $R^2$ and minimize the AIC, a statistic that evaluates the fit of the model based on the importance of the variables included. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was age and industry. This resulted in an adjusted $R^2$ of 0.12 and an AIC of 953. For billionaires that are self made, the optimal combination of explanatory variables was also age and industry which resulted in an adjusted $R^2$ of -0.01, and an AIC of 1505.
 
 Including country GDP in these models may have increased the $R^2$ values, but it decreased the adjusted $R^2$ values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.
+
+```{r}
+#| label: inherited-backwards-1
+
+aic_start <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic4 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + age + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic5 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic6 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic7 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + company.age, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+data.frame(Variable out = c("base", "company.relation", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
+  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5, aic6, aic7))
+```
 
 # Results
 
