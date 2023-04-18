@@ -496,8 +496,91 @@ aic7 <- linear_reg() |>
   fit(wealth ~ company.relation + company.type + age + location.gdp + industry + company.age, data = yes_inherited) |>
   glance() |> pull(AIC)
 
-data.frame(Variable out = c("base", "company.relation", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
+data.frame(Variable = c("base", "company.relation", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
   AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5, aic6, aic7))
+```
+
+```{r}
+#| label: inherited-backwards-2
+
+aic_start <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic4 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic5 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic6 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.type + age + location.gdp + industry + company.age, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+data.frame(Variable = c("base", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
+  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5, aic6))
+```
+
+```{r}
+#| label: inherited-backwards-3
+
+aic_start <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + industry + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic4 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+aic5 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + location.gdp + industry + company.age, data = yes_inherited) |>
+  glance() |> pull(AIC)
+
+data.frame(Variable = c("base", "age", "location.gdp", "industry", "company.age", "wealth.type"),
+  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5))
+```
+
+```{r}
+
 ```
 
 # Results
