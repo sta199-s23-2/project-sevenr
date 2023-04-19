@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|--------------------|----------------------------------------------------|
+|-------------------|-----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -61,9 +61,9 @@ The article only focuses on four regions in the world in relation to wealth of a
 
 #### Research question and hypothesis
 
-Thus, our research question is: "do the predictors of a linear regression modeling billionaire wealth change depending on if the wealth was inherited or not inherited?" That is, do the factors that are associated with higher levels of billionaire wealth change given that the billionaire had inherited money to begin with or not?
+Thus, our research question is: what is the best model for predicting billionaire wealth? That is, what variables would be included in a multivariate linear regression with wealth.in.billions as the response variable?
 
-Our hypothesis is that there will be a difference between the model for inherited billionaires and the model for self-made billionaires. Which variables will or will not be included is rather unpredictable, as many factors may or may not play a true role in wealth accumulation. However, we predict that wealth.how.industry, which describes the industry sector, may be relevant, as it is generally well-known that technology is a rapidly growing sector.
+Our hypothesis is that variables such as wealth.how.category, location.gdp, wealth.inherited, and age will be included, as those seem to be pertinent to wealth accumulation.
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
@@ -163,7 +163,7 @@ billion2001 <- billion2001 |>
   mutate(company.age = 2001 - company.founded)
 ```
 
-Finally, the variable inherited is changed to binary categorical variable. The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
+Finally, the variable inherited is changed to a binary categorical variable. The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
 
 ```{r}
 #| label: summary
@@ -204,7 +204,6 @@ billion2001 |>
     y = "Number of billionaires",
     title = "How many billionares inherit their wealth?"
   )
-
 ```
 
 Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most.
