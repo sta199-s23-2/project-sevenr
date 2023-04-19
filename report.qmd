@@ -453,134 +453,270 @@ This model helps to answer the research question by utilizing fit statistics to 
 Including country GDP in these models may have increased the $R^2$ values, but it decreased the adjusted $R^2$ values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.
 
 ```{r}
-#| label: inherited-backwards-1
-
-aic_start <- linear_reg() |>
+aicbase <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.relation + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic1 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ company.age + company.relation + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic2 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.relation + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic3 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic4 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + age + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.relation + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic5 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.relation + company.type + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic6 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.relation + company.type + industry + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic7 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.relation + company.type + age + location.gdp + industry + company.age, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.relation + company.type + industry + inherited + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
-data.frame(Variable = c("base", "company.relation", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
-  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5, aic6, aic7))
+aic8 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + company.relation + company.type + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-age", "-company.age", "-company.relation", "-company.type", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
+aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7, aic8)
+data.frame(variable_list, aic_values)
 ```
 
-```{r}
-#| label: inherited-backwards-2
+Removed company.relation
 
-aic_start <- linear_reg() |>
+```{r}
+aicbase <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic1 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ company.age + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic2 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic3 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic4 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.type + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic5 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.type + industry + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic6 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ company.type + age + location.gdp + industry + company.age, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + company.type + industry + inherited + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
-data.frame(Variable = c("base", "company.type", "age", "location.gdp", "industry", "company.age", "wealth.type"),
-  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5, aic6))
+aic7 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + company.type + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-age", "-company.age", "-company.type", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
+aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7)
+data.frame(variable_list, aic_values)
 ```
 
-```{r}
-#| label: inherited-backwards-3
+Removed company.type
 
-aic_start <- linear_reg() |>
+```{r}
+aicbase <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic1 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ location.gdp + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ company.age + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic2 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + industry + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic3 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + location.gdp + company.age + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + inherited + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic4 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + location.gdp + industry + wealth.type, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + industry + location.gdp + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
 aic5 <- linear_reg() |>
   set_engine("lm") |>
-  fit(wealth ~ age + location.gdp + industry + company.age, data = yes_inherited) |>
+  fit(wealth ~ age + company.age + industry + inherited + wealth.type, data = billion2001) |>
   glance() |> pull(AIC)
 
-data.frame(Variable = c("base", "age", "location.gdp", "industry", "company.age", "wealth.type"),
-  AIC = c(aic_start, aic1, aic2, aic3, aic4, aic5))
+aic6 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-age", "-company.age", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
+aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6)
+data.frame(variable_list, aic_values)
 ```
+
+Removed wealth.type
 
 ```{r}
+aicbase <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
 
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.age + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic4 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + industry + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic5 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ age + company.age + industry + inherited, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-age", "-company.age", "-industry", "-inherited", "-location.gdp") 
+aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5)
+data.frame(variable_list, aic_values)
 ```
+
+Removed age
+
+```{r}
+aicbase <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.age + industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.age + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.age + industry + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic4 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ company.age + industry + inherited, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-company.age", "-industry", "-inherited", "-location.gdp") 
+aic_values <- c(aicbase, aic1, aic2, aic3, aic4)
+data.frame(variable_list, aic_values)
+```
+
+Removed company.age
+
+```{r}
+aicbase <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry + inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ inherited + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry + location.gdp, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic3 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry + inherited, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-industry", "-inherited", "-location.gdp") 
+aic_values <- c(aicbase, aic1, aic2, aic3)
+data.frame(variable_list, aic_values)
+```
+
+Removed location.gdp
+
+```{r}
+aicbase <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry + inherited, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic1 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ inherited, data = billion2001) |>
+  glance() |> pull(AIC)
+
+aic2 <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry, data = billion2001) |>
+  glance() |> pull(AIC)
+
+variable_list <- c("all included", "-industry", "-inherited") 
+aic_values <- c(aicbase, aic1, aic2)
+data.frame(variable_list, aic_values)
+```
+
+Removed inherited.
 
 # Results
 
