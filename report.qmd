@@ -12,6 +12,7 @@ execute:
 #| message: false
 library(tidyverse)
 library(tidymodels)
+library(knitr)
 ```
 
 # Introduction and data
@@ -34,7 +35,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|--------------------|----------------------------------------------------|
+|-------------------|-----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -363,11 +364,17 @@ labs(
   theme_minimal()
 ```
 
-### **Multivariate linear regression**
+#### **Multivariate linear regression**
 
-Multivariate linear regression allows for prediction of the effects of several variables on a single response variable. We plan to use multivariate linear regression
+We plan to use multivariate linear regression to construct a model because we want to consider the effects of several of the variables in the dataset simultaneously on the wealth variable. The main question when constructing a multivariate linear regression model is which variables should be included and which variables should be excluded. One strategy to answer this question is backwards elimination. During backwards elimination, one starts with all variables of interest in the model. Then, each variable is excluded one at a time and the model is assessed to see if exclusion of the variable has improved it. If the model is improved with the variable gone, then it is removed and the process repeats until the model cannot be improved by variable exclusion any further. The criterion we use for variable exclusion is the AIC value, which characterizes how well the model fits the data. A lower AIC value means a better-fitting model, so if removing a variable results in a model with a lower AIC, then that is motivation for removing that variable from the model. We start with 8 variables which we considered interesting: age, company age, company relation, company type, industry, inheritance status, GDP, and wealth type.
+
+# Results
+
+A table showing the AIC values at each step of the backwards elimination is shown.
 
 ```{r}
+#| label: round-1
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ age + company.age + company.relation + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
@@ -415,12 +422,14 @@ aic8 <- linear_reg() |>
 
 variable_list <- c("all included", "-age", "-company.age", "-company.relation", "-company.type", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
 aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7, aic8)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed company.relation
 
 ```{r}
+#| label: round-2
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ age + company.age + company.type + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
@@ -463,12 +472,14 @@ aic7 <- linear_reg() |>
 
 variable_list <- c("all included", "-age", "-company.age", "-company.type", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
 aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed company.type
 
 ```{r}
+#| label: round-3
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ age + company.age + industry + inherited + location.gdp + wealth.type, data = billion2001) |>
@@ -512,6 +523,8 @@ data.frame(variable_list, aic_values)
 Removed wealth.type
 
 ```{r}
+#| label: round-4
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ age + company.age + industry + inherited + location.gdp, data = billion2001) |>
@@ -544,12 +557,14 @@ aic5 <- linear_reg() |>
 
 variable_list <- c("all included", "-age", "-company.age", "-industry", "-inherited", "-location.gdp") 
 aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed age
 
 ```{r}
+#| label: round-5
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ company.age + industry + inherited + location.gdp, data = billion2001) |>
@@ -577,12 +592,14 @@ aic4 <- linear_reg() |>
 
 variable_list <- c("all included", "-company.age", "-industry", "-inherited", "-location.gdp") 
 aic_values <- c(aicbase, aic1, aic2, aic3, aic4)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed company.age
 
 ```{r}
+#| label: round-6
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ industry + inherited + location.gdp, data = billion2001) |>
@@ -605,12 +622,14 @@ aic3 <- linear_reg() |>
 
 variable_list <- c("all included", "-industry", "-inherited", "-location.gdp") 
 aic_values <- c(aicbase, aic1, aic2, aic3)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed location.gdp
 
 ```{r}
+#| label: round-7
+
 aicbase <- linear_reg() |>
   set_engine("lm") |>
   fit(wealth ~ industry + inherited, data = billion2001) |>
@@ -628,15 +647,31 @@ aic2 <- linear_reg() |>
 
 variable_list <- c("all included", "-industry", "-inherited") 
 aic_values <- c(aicbase, aic1, aic2)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed inherited.
 
+```{r}
+#| label: display-model
+
+best_fit <- linear_reg() |>
+  set_engine("lm") |>
+  fit(wealth ~ industry, data = billion2001)
+
+best_fit |> 
+  tidy() |>
+  select(term, estimate)
+
+glance(best_fit)$r.squared
+```
+
 # Results
 
-Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire's age and the industry of the billionaire's company. With that being said, even though these were the best predictors, they only yielded an $R^2$ of 0.19 and an adjusted $R^2$ of 0.12 for inherited billionaires and an $R^2$ of 0.05 and an adjusted $R^2$ of -0.02 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire's worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.
+After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.
 
-Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That's about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurrence stands to reason considering the tech industry is relatively new and filled with booming startups.
+Although the several rounds of backwards elimination resulted in industry being the final variable, a close look at the $R^2$ value of the model shows that it is only 0.0356, which is not high. A low $R^2$ value means that very little of the variability in the data is captured by the model. Thus, while being the best variable out of the original eight, it is not a very good predictor on its own. This result makes sense; wealth accumulation is not as simple as entering the right industry type. After all, there are many, many people working in each of the listed industries. However, only a few are billionaires. In addition, the fact that most of the variables did not make it into the final model does not mean that becoming a billionaire is a totally random process. There must be reasons why some people accumulate fantastic amounts of wealth while others don't. It is likely that such reasons are incredibly complex, and either may not be included in dataset as variables, or may be too complicated to even quantify or categorize.
+
+There are several directions we could go in for future studies. For one, a multivariate model using the variables can still be constructed using forward selection. We chose backwards elimination because we wanted to consider as many variables at once at the beginning. However, by doing forward selection, it is possible to obtain a different model than the one determined via backwards elimination. We could also investigate each variable separately, and observe whether there are any particularly high $R^2$ values associated with them. Finally, there clearly must be future research done to uncover other possible variables. Either way, while there are several factors that are known to lead to wealth accumulation, combining them into a mathematical model to predict wealth still remains an elusive task.
 
 ## 

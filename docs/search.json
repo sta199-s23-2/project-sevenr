@@ -109,7 +109,7 @@
     "href": "report.html",
     "title": "Sevenr Project",
     "section": "",
-    "text": "library(tidyverse)\nlibrary(tidymodels)"
+    "text": "library(tidyverse)\nlibrary(tidymodels)\nlibrary(knitr)"
   },
   {
     "objectID": "report.html#methodology",

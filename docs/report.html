@@ -168,11 +168,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#introduction-and-data" id="toc-introduction-and-data" class="nav-link active" data-scroll-target="#introduction-and-data">Introduction and data</a></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a>
-  <ul class="collapse">
-  <li><a href="#multivariate-linear-regression" id="toc-multivariate-linear-regression" class="nav-link" data-scroll-target="#multivariate-linear-regression"><strong>Multivariate Linear Regression</strong></a></li>
-  </ul></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a>
   <ul class="collapse">
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
@@ -201,7 +199,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="introduction-and-data" class="level1">
 <h1>Introduction and data</h1>
@@ -244,8 +243,8 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 <p>As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:</p>
 <table class="table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 72%">
+<col style="width: 26%">
+<col style="width: 73%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -624,203 +623,242 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </div>
 </div>
 </section>
-<section id="multivariate-linear-regression" class="level3">
-<h3 class="anchored" data-anchor-id="multivariate-linear-regression"><strong>Multivariate Linear Regression</strong></h3>
+<section id="multivariate-linear-regression" class="level4">
+<h4 class="anchored" data-anchor-id="multivariate-linear-regression"><strong>Multivariate linear regression</strong></h4>
+<p>We plan to use multivariate linear regression to construct a model because we want to consider the effects of several of the variables in the dataset simultaneously on the wealth variable. The main question when constructing a multivariate linear regression model is which variables should be included and which variables should be excluded. One strategy to answer this question is backwards elimination. During backwards elimination, one starts with all variables of interest in the model. Then, each variable is excluded one at a time and the model is assessed to see if exclusion of the variable has improved it. If the model is improved with the variable gone, then it is removed and the process repeats until the model cannot be improved by variable exclusion any further. The criterion we use for variable exclusion is the AIC value, which characterizes how well the model fits the data. A lower AIC value means a better-fitting model, so if removing a variable results in a model with a lower AIC, then that is motivation for removing that variable from the model. We start with 8 variables which we considered interesting: age, company age, company relation, company type, industry, inheritance status, GDP, and wealth type.</p>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>A table showing the AIC values at each step of the backwards elimination is shown.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>inher <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">*</span> industry, <span class="at">data =</span> yes_inherited) </span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(inher)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1871914</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(inher)<span class="sc">$</span>adj.r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1211507</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(inher)<span class="sc">$</span>AIC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 953.1887</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>notinher <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">*</span> industry, <span class="at">data =</span> not_inherited) </span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(notinher)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.0491791</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(notinher)<span class="sc">$</span>adj.r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.01477746</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(notinher)<span class="sc">$</span>AIC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1504.705</code></pre>
-</div>
-</div>
-<p>This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to maximize adjusted <span class="math inline">\(R^2\)</span> and minimize the AIC, a statistic that evaluates the fit of the model based on the importance of the variables included. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was age and industry. This resulted in an adjusted <span class="math inline">\(R^2\)</span> of 0.12 and an AIC of 953. For billionaires that are self made, the optimal combination of explanatory variables was also age and industry which resulted in an adjusted <span class="math inline">\(R^2\)</span> of -0.01, and an AIC of 1505.</p>
-<p>Including country GDP in these models may have increased the <span class="math inline">\(R^2\)</span> values, but it decreased the adjusted <span class="math inline">\(R^2\)</span> values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a>aic7 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a>aic8 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb43-43"><a href="#cb43-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb43-44"><a href="#cb43-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb43-45"><a href="#cb43-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-46"><a href="#cb43-46" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-company.relation"</span>, <span class="st">"-company.type"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
-<span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7, aic8)</span>
-<span id="cb43-48"><a href="#cb43-48" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>      variable_list aic_values
-1      all included   2483.899
-2              -age   2482.594
-3      -company.age   2482.317
-4 -company.relation   2477.996
-5     -company.type   2480.748
-6         -industry   2487.738
-7        -inherited   2482.089
-8     -location.gdp   2484.224
-9      -wealth.type   2480.405</code></pre>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>aic7 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>aic8 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-42"><a href="#cb31-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-43"><a href="#cb31-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.relation <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb31-44"><a href="#cb31-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb31-45"><a href="#cb31-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-46"><a href="#cb31-46" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-company.relation"</span>, <span class="st">"-company.type"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
+<span id="cb31-47"><a href="#cb31-47" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7, aic8)</span>
+<span id="cb31-48"><a href="#cb31-48" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2483.899</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-age</td>
+<td style="text-align: right;">2482.594</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-company.age</td>
+<td style="text-align: right;">2482.317</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-company.relation</td>
+<td style="text-align: right;">2477.996</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-company.type</td>
+<td style="text-align: right;">2480.748</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2487.738</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2482.089</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-location.gdp</td>
+<td style="text-align: right;">2484.224</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-wealth.type</td>
+<td style="text-align: right;">2480.405</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed company.relation</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>aic7 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-company.type"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
-<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7)</span>
-<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  variable_list aic_values
-1  all included   2477.996
-2          -age   2476.723
-3  -company.age   2476.416
-4 -company.type   2475.008
-5     -industry   2481.817
-6    -inherited   2476.176
-7 -location.gdp   2478.294
-8  -wealth.type   2475.352</code></pre>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>aic7 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> company.type <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-company.type"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
+<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6, aic7)</span>
+<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2477.996</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-age</td>
+<td style="text-align: right;">2476.723</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-company.age</td>
+<td style="text-align: right;">2476.416</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-company.type</td>
+<td style="text-align: right;">2475.008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2481.817</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2476.176</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-location.gdp</td>
+<td style="text-align: right;">2478.294</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-wealth.type</td>
+<td style="text-align: right;">2475.352</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed company.type</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
-<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6)</span>
-<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> wealth.type, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>aic6 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>, <span class="st">"-wealth.type"</span>) </span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5, aic6)</span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  variable_list aic_values
 1  all included   2475.008
@@ -834,155 +872,271 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </div>
 <p>Removed wealth.type</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-20"><a href="#cb49-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-21"><a href="#cb49-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-22"><a href="#cb49-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-23"><a href="#cb49-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-24"><a href="#cb49-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-25"><a href="#cb49-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-26"><a href="#cb49-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb49-27"><a href="#cb49-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-28"><a href="#cb49-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb49-29"><a href="#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb49-30"><a href="#cb49-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-31"><a href="#cb49-31" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
-<span id="cb49-32"><a href="#cb49-32" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5)</span>
-<span id="cb49-33"><a href="#cb49-33" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  variable_list aic_values
-1  all included   2472.496
-2          -age   2470.944
-3  -company.age   2471.113
-4     -industry   2474.538
-5    -inherited   2473.264
-6 -location.gdp   2471.623</code></pre>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true" tabindex="-1"></a>aic5 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> age <span class="sc">+</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-age"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4, aic5)</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2472.496</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-age</td>
+<td style="text-align: right;">2470.944</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-company.age</td>
+<td style="text-align: right;">2471.113</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2474.538</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2473.264</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-location.gdp</td>
+<td style="text-align: right;">2471.623</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed age</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
-<span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4)</span>
-<span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  variable_list aic_values
-1  all included   2470.944
-2  -company.age   2469.364
-3     -industry   2472.539
-4    -inherited   2471.350
-5 -location.gdp   2470.104</code></pre>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>aic4 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> company.age <span class="sc">+</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-company.age"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3, aic4)</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2470.944</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-company.age</td>
+<td style="text-align: right;">2469.364</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2472.539</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2471.350</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-location.gdp</td>
+<td style="text-align: right;">2470.104</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed company.age</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb53-15"><a href="#cb53-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-16"><a href="#cb53-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb53-17"><a href="#cb53-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb53-18"><a href="#cb53-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb53-19"><a href="#cb53-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb53-20"><a href="#cb53-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-21"><a href="#cb53-21" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
-<span id="cb53-22"><a href="#cb53-22" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3)</span>
-<span id="cb53-23"><a href="#cb53-23" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  variable_list aic_values
-1  all included   2469.364
-2     -industry   2471.357
-3    -inherited   2469.406
-4 -location.gdp   2468.621</code></pre>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> inherited <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> location.gdp, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>aic3 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>, <span class="st">"-location.gdp"</span>) </span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2, aic3)</span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2469.364</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2471.357</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2469.406</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-location.gdp</td>
+<td style="text-align: right;">2468.621</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed location.gdp</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
-<span id="cb55-13"><a href="#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
-<span id="cb55-14"><a href="#cb55-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
-<span id="cb55-15"><a href="#cb55-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb55-16"><a href="#cb55-16" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>) </span>
-<span id="cb55-17"><a href="#cb55-17" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2)</span>
-<span id="cb55-18"><a href="#cb55-18" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  variable_list aic_values
-1  all included   2468.621
-2     -industry   2470.790
-3    -inherited   2468.364</code></pre>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>aicbase <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry <span class="sc">+</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>aic1 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> inherited, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>aic2 <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry, <span class="at">data =</span> billion2001) <span class="sc">|&gt;</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">glance</span>() <span class="sc">|&gt;</span> <span class="fu">pull</span>(AIC)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>variable_list <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"all included"</span>, <span class="st">"-industry"</span>, <span class="st">"-inherited"</span>) </span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>aic_values <span class="ot">&lt;-</span> <span class="fu">c</span>(aicbase, aic1, aic2)</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(variable_list, aic_values) <span class="sc">|&gt;</span> <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">variable_list</th>
+<th style="text-align: right;">aic_values</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">all included</td>
+<td style="text-align: right;">2468.621</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">-industry</td>
+<td style="text-align: right;">2470.790</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">-inherited</td>
+<td style="text-align: right;">2468.364</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Removed inherited.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>best_fit <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(wealth <span class="sc">~</span> industry, <span class="at">data =</span> billion2001)</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>best_fit <span class="sc">|&gt;</span> </span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(term, estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 2
+  term                               estimate
+  &lt;chr&gt;                                 &lt;dbl&gt;
+1 (Intercept)                           3.97 
+2 industryEnergy, mining, and metals   -1.89 
+3 industryMedia                         0.140
+4 industryMoney management             -1.21 
+5 industryNon-consumer industrial      -1.62 
+6 industryOther                        -2.11 
+7 industryReal estate, construction    -1.38 
+8 industryTechnology                    0.831</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(best_fit)<span class="sc">$</span>r.squared</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.03561891</code></pre>
+</div>
+</div>
 </section>
-</section>
-<section id="results" class="level1">
+<section id="results-1" class="level1">
 <h1>Results</h1>
-<p>Based on our regression model, we can see that the optimal predictors of billionaire net worth remained the same for both billionaires that inherited their money and those that did not. We found that the best predictors were the billionaire’s age and the industry of the billionaire’s company. With that being said, even though these were the best predictors, they only yielded an <span class="math inline">\(R^2\)</span> of 0.19 and an adjusted <span class="math inline">\(R^2\)</span> of 0.12 for inherited billionaires and an <span class="math inline">\(R^2\)</span> of 0.05 and an adjusted <span class="math inline">\(R^2\)</span> of -0.02 for non-inherited billionaires. They are clearly better predictors for inherited billionaires than non-inherited billionaires, but are poor predictors in general. This suggests that a billionaire’s worth cannot be strongly predicted by factors such as these, and that there are other attributes outside of this dataset that are contributing to their wealth.</p>
-<p>Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That’s about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurrence stands to reason considering the tech industry is relatively new and filled with booming startups.</p>
+<p>After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.</p>
+<p>Although the several rounds of backwards elimination resulted in industry being the final variable, a close look at the <span class="math inline">\(R^2\)</span> value of the model shows that it is only 0.0356, which is not high. A low <span class="math inline">\(R^2\)</span> value means that very little of the variability in the data is captured by the model. Thus, while being the best variable out of the original eight, it is not a very good predictor on its own. This result makes sense; wealth accumulation is not as simple as entering the right industry type. After all, there are many, many people working in each of the listed industries. However, only a few are billionaires. In addition, the fact that most of the variables did not make it into the final model does not mean that becoming a billionaire is a totally random process. There must be reasons why some people accumulate fantastic amounts of wealth while others don’t. It is likely that such reasons are incredibly complex, and either may not be included in dataset as variables, or may be too complicated to even quantify or categorize.</p>
+<p>There are several directions we could go in for future studies. For one, a multivariate model using the variables can still be constructed using forward selection. We chose backwards elimination because we wanted to consider as many variables at once at the beginning. However, by doing forward selection, it is possible to obtain a different model than the one determined via backwards elimination. We could also investigate each variable separately, and observe whether there are any particularly high <span class="math inline">\(R^2\)</span> values associated with them. Finally, there clearly must be future research done to uncover other possible variables. Either way, while there are several factors that are known to lead to wealth accumulation, combining them into a mathematical model to predict wealth still remains an elusive task.</p>
 <section id="section" class="level2">
 <h2 class="anchored" data-anchor-id="section"></h2>
 
