@@ -3,7 +3,7 @@ title: "Sevenr Project"
 subtitle: "Report"
 format: html
 editor: visual
-execute:
+execute: 
   echo: true
 ---
 
@@ -34,7 +34,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|-------------------|-----------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -179,7 +179,73 @@ glimpse(billion2001)
 
 #### Preliminary visualizations
 
-The dataset is split into two for future use: one for billionaires who inherited their wealth, and one for those who didn't.
+```{r}
+#| label: mean-age
+
+mean_age <- billion2001 |> 
+  summarize(mean_age = mean(age)) |> pull(mean_age)
+```
+
+The mean age of the billionaires is around `r mean_age` years old. Below are graphs of the age distribution and wealth plotted against age. We see that age follows a bell curve distribution. The relationship between age and wealth seems weak visually; however, age is still an interesting variable to consider.
+
+```{r}
+#| label: vis-by-age
+#| message: false
+
+billion2001 |>
+  ggplot(aes(x = age)) +
+  geom_histogram(color = "black", fill = "steelblue") +
+  labs(
+    x = "Age (years)",
+    y = "Number of billionaires",
+    title = "Age distribution of billionaires"
+  ) +
+  theme_minimal()
+
+billion2001 |> 
+  ggplot(aes(x = age, y = wealth)) +
+  geom_point() +
+  labs(
+    x = "Age (years)",
+    y = "Wealth (in billions of dollars)",
+    title = "Wealth plotted against age"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+#| label: mean-company-age
+
+mean_comp_age <- billion2001 |> 
+  summarize(mean_age = mean(company.age)) |> pull(mean_age)
+```
+
+The mean company age of the billionaires is `r mean_comp_age`. Below, company age is plotted in similar fashion. Most companies are younger than 100 years. It seems as if the older the company, the less wealthy the associated billionaire.
+
+```{r}
+#| label: vis-by-comp-age
+#| message: false
+
+billion2001 |>
+  ggplot(aes(x = company.age)) +
+  geom_histogram(color = "black", fill = "steelblue") +
+  labs(
+    x = "Company of age (years)",
+    y = "Number of companies",
+    title = "Company age distribution of billionaires"
+  ) +
+  theme_minimal()
+
+billion2001 |> 
+  ggplot(aes(x = company.age, y = wealth)) +
+  geom_point() +
+  labs(
+    x = "Age of company (years)",
+    y = "Wealth (in billions of dollars)",
+    title = "Wealth plotted against company age"
+  ) +
+  theme_minimal()
+```
 
 ```{r}
 #| label: group-by-inheritance
@@ -191,10 +257,10 @@ not_inherited <- billion2001 |>
   filter(inherited == "Not inherited")
 ```
 
-Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference between the two groups does not seem too significant.
+Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.
 
 ```{r}
-#| label: vis-inherit
+#| label: vis-by-inherit
 
 billion2001 |>
   ggplot(aes(x = inherited)) +
@@ -203,10 +269,11 @@ billion2001 |>
     x = "Inheritance status",
     y = "Number of billionaires",
     title = "How many billionares inherit their wealth?"
-  )
+  ) + 
+  theme_minimal()
 ```
 
-Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most.
+Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most compared to some other billionaires
 
 ```{r}
 #| label: vis-wealth
@@ -219,238 +286,86 @@ billion2001 |>
     x = "Wealth (in billions of USD)",
     y = "Count of billionaires",
     title = "Distribution of total wealth",
-  )
+  ) + 
+  theme_minimal()
 ```
 
-Next, we visualize the proportion of various company industries within each group as well as their frequencies. We can see that the proportions vary between the different groups.
+```{r}
+#| label: mean-wealth-inheritance
+
+billion2001 |> 
+  group_by(inherited) |>
+  summarize(mean_wealth = mean(wealth))
+```
+
+The mean wealth of those who inherit their wealth seems to be higher than those who didn't.
+
+Next, we visualize the proportion of various company industries, as well as wealth distributions by industry.
 
 ```{r}
 #| label: industry-vis
 #| message: false
 
 billion2001 |>
-  ggplot(aes(y = inherited, fill = industry)) +
-  geom_bar(stat = "count", position = "fill") + 
-  scale_x_continuous(labels = scales::percent)|>
+  group_by(industry) |>
+  summarize(n = n()) |>
+  ggplot(aes(x = "", y = n, fill = industry)) +
+  geom_bar(stat="identity", width=1) + 
+  coord_polar("y", start = 0) +
   labs(
-    title = "Percent comparison of inherited and non-inherited billionaires 
-    based on industry",
-    x = "Proportion of billionaires",
-    y = "Inheritance status",
+    title = "Distribution of industry types",
     fill = "Company industry"
-    )
+    ) +
+  theme_void()
 
 billion2001 |>
-  ggplot(aes(x = wealth, fill = industry)) +
-  geom_histogram() +
-  facet_wrap(~inherited, ncol = 1) +
-  labs(title = "Billionaire worth based on company industry for both
-              inherited and non-inherited billionaires",
-       x = "Wealth (billions of dollars)",
-       y = "Count",
-       fill = "Company industry"
-       )
+  ggplot(aes(x = wealth, y = industry, color = industry)) +
+  geom_boxplot(show.legend = FALSE) +
+  labs(title = "Billionaire worth by company industry",
+       x = "Wealth (billions of dollars)", 
+       y = "Industry"
+       ) +
+  theme_minimal()
 ```
 
 The proportions and numbers are summarized below; again, they show that wealth varies between the industries.
 
 ```{r}
-#| label: statistics
+#| label: mean-by-industry
 
-yes_inherited |>
+billion2001 |>
   group_by(industry) |>
   summarize(mean_wealth = mean(wealth),
             count = n(),
             percent_industry = (n()/nrow(yes_inherited))*100)
-
-not_inherited |>
-  group_by(industry) |>
-  summarize(mean_wealth = mean(wealth),
-            count = n(),
-            percent_industry = (n()/nrow(not_inherited))*100)
 ```
-
-#### Linear regression
-
-Linear regression is the principle method by which a response variable can be modeled by one or more explanatory variables. It is used in many contexts; here, we are interested in seeing which variables make up the best-fitting linear regression model that would allow us to accurately predict billionaire wealth.
 
 ```{r}
-#| label: location-regression
- 
-#regression for location.gdp for inherited
- linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ location.gdp, data = yes_inherited) |>
-  tidy()
+#| label: mean-gdp
 
-#regression for location.gdp for not inherited
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ location.gdp, data = not_inherited) |>
-  tidy()
+mean_gdp <- billion2001 |>
+  summarize(mean_gdp = mean(location.gdp)) |> pull(mean_gdp)
 ```
 
-For billionaires who inherited their wealth:
-
-$$
-wealth\_in\_billions\ = 6.59*10^-14*location\_gdp + 3.28
-$$
-
-$$
-adjusted\_r^2 = 0.001188114
-$$
-
-$$
-AIC = 964.0363
-$$
-
-For billionaires who did not inherit their wealth:
-
-$$
-wealth\_in\_billions\ = 5.35*10^-14*location\_gdp + 2.93
-$$
-
-$$
-adjusted\_r^2 = -0.001972628
-$$
-
-$$
-AIC = 1488.223
-$$
+The mean GDP of all the locations the billionaires are based is `r mean_gdp`. Below is a scatterplot displaying the relationship between GDP and wealth. It appears there may be an upward trend as the GDP of the billionaire's location increases.
 
 ```{r}
-#| label: industry-regression
- 
-#regression by industry for inherited
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ industry, data = yes_inherited) |>
-  tidy()
- 
-#regression by industry for not inherited
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ industry, data = not_inherited) |>
-  tidy()
+#| label: vis-by-gdp
+
+billion2001 |>
+  ggplot(aes(x = location.gdp, y = wealth)) +
+  geom_point() +
+labs(
+  x = "Location GDP (dollars)",
+  y = "Wealth (in billions of dollars)",
+  title = "Billionaire wealth by GDP of location"
+  ) +
+  theme_minimal()
 ```
 
-For billionaires who inherited their wealth:
+### **Multivariate linear regression**
 
-$$
-wealth\_in\_billions\ =   
-.207*technology - 1.89*other  + -1.36*non_consumer 
-$$
-
-$$
--1.304*real_estate_construction - 
-1.21*money-management - .34*media
-$$
-
-$$
- - 1.81*energy-mining-metals +3.97
-$$
-
-$$
-adjusted\_r^2 = 0.05150269
-$$
-
-$$
-AIC = 959.9096
-$$
-
-For billionaires who did not inherit their wealth:
-
-$$
-wealth\_in\_billions\ =   
-.207*technology - 1.89*other  + -1.36*non_consumer
-$$
-
-$$
--1.304*real_estate_construction - 
-1.21*money-management - .34*media
-$$
-
-$$
- - 1.81*energy-mining-metals +3.97
-$$
-
-$$
-adjusted\_r^2 = 0.004701796
-$$
-
-$$
-AIC = 1492.497
-$$
-
-```{r}
-#| label: age-regression
- 
-#regression by age for inherited
-linear_reg() |>
-    set_engine("lm") |>
-    fit(wealth ~ age, data = yes_inherited) |>
-    tidy()
- 
-#regression by age for not inherited
-linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ age, data = not_inherited) |>
-  tidy()
-```
-
-For Billionaires who inherited their wealth:
-
-$$
-wealth\_in\_billions\ = 0.04*age + 0.98
-$$
-
-$$
-adjusted\_r^2 = 0.01515218
-$$
-
-$$
-AIC = 961.5865
-$$
-
-For Billionaires who did not inherit their wealth:
-
-$$
-wealth\_in\_billions\ = -0.04*age + 5.73
-$$
-
-$$
-adjusted\_r^2 = 0.004316155
-$$
-
-$$
-AIC = 1486.718
-$$
-
-### **Multivariate Linear Regression**
-
-```{r}
-#| label: multivariate-inherited
-
-inher <- linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ age * industry, data = yes_inherited) 
-
-glance(inher)$r.squared
-glance(inher)$adj.r.squared
-glance(inher)$AIC
-
-notinher <- linear_reg() |>
-  set_engine("lm") |>
-  fit(wealth ~ age * industry, data = not_inherited) 
-
-glance(notinher)$r.squared
-glance(notinher)$adj.r.squared
-glance(notinher)$AIC
-```
-
-This model helps to answer the research question by utilizing fit statistics to find the explanatory variables that best predict wealth. By calculating a different model for different inheritance statuses, we are able to see if the results differ based on that grouping and therefore see if different variables predict wealth for different inheritance statuses. Using backwards elimination, we adjusted the explanatory variables to maximize adjusted $R^2$ and minimize the AIC, a statistic that evaluates the fit of the model based on the importance of the variables included. For billionaires who inherited their wealth, the optimal combination of explanatory variables for the model was age and industry. This resulted in an adjusted $R^2$ of 0.12 and an AIC of 953. For billionaires that are self made, the optimal combination of explanatory variables was also age and industry which resulted in an adjusted $R^2$ of -0.01, and an AIC of 1505.
-
-Including country GDP in these models may have increased the $R^2$ values, but it decreased the adjusted $R^2$ values and increased AIC, suggesting that country GDP was not a useful explanatory variable to add to the model.
+Multivariate linear regression allows for prediction of the effects of several variables on a single response variable. We plan to use multivariate linear regression
 
 ```{r}
 aicbase <- linear_reg() |>
@@ -724,40 +639,4 @@ Based on our regression model, we can see that the optimal predictors of billion
 
 Based on our histogram and analysis focusing on company industry, we can see that for both types of billionaires the most frequent industry is Consumer goods, retail, and restaurants, and the next highest is Money management. A notable difference though, is that there are 46 non-inherited billionaires compared to only 10 inherited billionaires from the technology industry (That's about 6% of billionaires from the inherited group compared to about 19% of the not inherited group). This occurrence stands to reason considering the tech industry is relatively new and filled with booming startups.
 
-## Changelog
-
-4/3:
-
--   filtered year and variables (variable_filter)
-
--   grouped by inheritance (inheritance_grouping, yes_inherited, not_inherited)
-
--   regressions by location, age, sector; univariate models from total, then individual group data frames
-
-4/5:
-
--   renamed variable_filter to billion2001, renamed wealth.how.industry to industry
-
--   removed selecting variables (aka leaving all variables in)
-
--   added comments
-
--   commented out glimpse(billion)
-
--   cleaned up and combined industry levels (check underneath for groupings)
-
--   changed regression by company.sector to regression by industry
-
-4/7:
-
--   histogram model added and explained
-
--   statistics from model added to results portion
-
--   added literature review from proposal
-
--   cleaned up graphs
-
--   added results sections
-
--   added percent stacked bar chart
+## 
