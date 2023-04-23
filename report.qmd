@@ -4,7 +4,7 @@ subtitle: "Report"
 format: html
 editor: visual
 execute: 
-  echo: true
+  echo: false
 ---
 
 ```{r}
@@ -35,7 +35,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|-------------------|-----------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -164,7 +164,7 @@ billion2001 <- billion2001 |>
   mutate(company.age = 2001 - company.founded)
 ```
 
-Finally, the variable inherited is changed to a binary categorical variable. The end result is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
+Finally, the variable inherited is changed to a binary categorical variable. The end result of the cleaning is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
 
 ```{r}
 #| label: summary
@@ -221,7 +221,7 @@ mean_comp_age <- billion2001 |>
   summarize(mean_age = mean(company.age)) |> pull(mean_age)
 ```
 
-The mean company age of the billionaires is `r mean_comp_age`. Below, company age is plotted in similar fashion. Most companies are younger than 100 years. It seems as if the older the company, the less wealthy the associated billionaire.
+The mean company age of the billionaires is `r mean_comp_age`. Below, company age is plotted in similar fashion as billionaire age. Most companies are younger than 100 years. It seems as if the older the company, the less wealthy the associated billionaire.
 
 ```{r}
 #| label: vis-by-comp-age
@@ -370,7 +370,7 @@ We plan to use multivariate linear regression to construct a model because we wa
 
 # Results
 
-A table showing the AIC values at each step of the backwards elimination is shown.
+Tables showing the AIC values at each step of the process are shown. The variable name is the variable that was removed from the model to generate the corresponding AIC value.
 
 ```{r}
 #| label: round-1
@@ -517,7 +517,7 @@ aic6 <- linear_reg() |>
 
 variable_list <- c("all included", "-age", "-company.age", "-industry", "-inherited", "-location.gdp", "-wealth.type") 
 aic_values <- c(aicbase, aic1, aic2, aic3, aic4, aic5, aic6)
-data.frame(variable_list, aic_values)
+data.frame(variable_list, aic_values) |> kable()
 ```
 
 Removed wealth.type
@@ -652,6 +652,8 @@ data.frame(variable_list, aic_values) |> kable()
 
 Removed inherited.
 
+The final model only has the variable industry. Below, the coefficients of this model are tabulated; the intercept industry is "Consumer goods, retail, and restaurants".
+
 ```{r}
 #| label: display-model
 
@@ -665,6 +667,8 @@ best_fit |>
 
 glance(best_fit)$r.squared
 ```
+
+The $R^2$ value of this model is 0.03561891.
 
 # Results
 
