@@ -104,10 +104,20 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction-and-data" id="toc-introduction-and-data" class="nav-link active" data-scroll-target="#introduction-and-data">Introduction and data</a></li>
-  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
-  <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a>
+  <li><a href="#introduction-and-data" id="toc-introduction-and-data" class="nav-link active" data-scroll-target="#introduction-and-data">Introduction and data</a>
+  <ul class="collapse">
+  <li><a href="#research-question-and-hypothesis" id="toc-research-question-and-hypothesis" class="nav-link" data-scroll-target="#research-question-and-hypothesis">Research question and hypothesis</a></li>
+  <li><a href="#literature-review" id="toc-literature-review" class="nav-link" data-scroll-target="#literature-review">Literature Review</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#relevant-variables" id="toc-relevant-variables" class="nav-link" data-scroll-target="#relevant-variables">Relevant variables</a></li>
+  </ul></li>
+  <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a>
+  <ul class="collapse">
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning">Data cleaning</a></li>
+  <li><a href="#preliminary-visualizations" id="toc-preliminary-visualizations" class="nav-link" data-scroll-target="#preliminary-visualizations">Preliminary visualizations</a></li>
+  <li><a href="#multivariate-linear-regression" id="toc-multivariate-linear-regression" class="nav-link" data-scroll-target="#multivariate-linear-regression"><strong>Multivariate linear regression</strong></a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a>
   <ul class="collapse">
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
   </ul></li>
@@ -139,6 +149,22 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <section id="introduction-and-data" class="level1">
 <h1>Introduction and data</h1>
+<p>The first question that comes to mind when a billionaire is the topic of conversation is: “How did they make that much money?” There are only so many in the world, making them a fascinating subject to study considering the success they have achieved. Some have inherited their wealth, while others reached it through entrepreneurship or investments. Because there are so many different ways a person can become a billionaire, it is interesting whether anything can be learned about the world’s current billionaires, and whether that can be taken and used to estimate how much a given billionaire is worth.</p>
+<section id="research-question-and-hypothesis" class="level2">
+<h2 class="anchored" data-anchor-id="research-question-and-hypothesis">Research question and hypothesis</h2>
+<p><strong>Thus, our research question is: what is the best indicator(s) for predicting a billionaire’s wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?</strong></p>
+<p>Our hypothesis is that the industry of the billionaire’s field of work, the gdp of the billionaire’s country, and billionaire’s age will be included, as those seem to be pertinent to wealth accumulation. Since some industries are booming more than others and have higher wealth “ceilings” (ex. technology industry vs.&nbsp;media industry), we believe knowing the industry has a sizable impact on the billionaire’s wealth. We also hypothesize a positive linear relationship between a billionaire’s wealth and the gdp of their country due to the benefits of a strong economy, making the country gdp a good indicator. Lastly, we think there is another positive linear relationship between wealth and the billionaire’s age, as company founders that make up a large proportion of billionaires tend to accumulate more wealth over time, thus making age a good indicating variable as well.</p>
+<p><a href="https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917" class="uri">https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917</a></p>
+</section>
+<section id="literature-review" class="level2">
+<h2 class="anchored" data-anchor-id="literature-review">Literature Review</h2>
+<p>James Petras (2008) Global ruling class: Billionaires and how they “make it”, Journal of Contemporary Asia, 38:2,319-329, DOI: <a href="https://doi.org/10.1080/00472330701822355">10.1080/00472330701822355</a></p>
+<p><a href="https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button</a></p>
+<p>The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context to explain how they acquired their wealth. The countries/regions mentioned are Russia, Latin America, China, and India. The major projected relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India’s growing wealth, in reality people are growing poorer and poorer as the billionaires continue to exploit the system to gain more wealth. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.</p>
+<p>The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires’ success is indifferent to that of the country’s success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.</p>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 2,614
@@ -167,16 +193,17 @@ $ wealth.how.was.founder   &lt;chr&gt; "True", "True", "True", "True", "True", "
 $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "True…</code></pre>
 </div>
 </div>
-<p>The dataset we are working with is a large listing of billionaires across the world along with information about them collected at three different time points. There are 2614 observations and 22 variables. Not every observation is a unique billionaire; many are repeated up to three times (one at each time point). In addition, not every 22 variable is statistically interesting; many, such as name, rank, and company.name are identifying variables. However, the other variables are statistically useful and interesting, and our goal is to investigate them.</p>
+<p>The dataset we are working with to answer our research question is a large listing of billionaires across the world along with information about them collected at three different time points (1996, 2001, and 2014). There are 2614 observations and 22 variables. Not every observation is a unique billionaire; many are repeated up to three times (one at each time point). In addition, not every variable is statistically interesting; many, such as name, rank, and company.name are identifying variables. However, the other variables are statistically useful and interesting, and our goal is to investigate them.</p>
 <p>The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.</p>
 <p>One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g.&nbsp;high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitical billionaires to any person on the planet who accumulates wealth.</p>
-<section id="relevant-variables" class="level4">
-<h4 class="anchored" data-anchor-id="relevant-variables">Relevant variables</h4>
+</section>
+<section id="relevant-variables" class="level2">
+<h2 class="anchored" data-anchor-id="relevant-variables">Relevant variables</h2>
 <p>As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:</p>
 <table class="table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 72%">
+<col style="width: 26%">
+<col style="width: 73%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -239,57 +266,58 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 </tr>
 </tbody>
 </table>
-<p>Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today’s discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are “self-made”?</p>
-</section>
-<section id="literature-review" class="level4">
-<h4 class="anchored" data-anchor-id="literature-review">Literature Review</h4>
-<p><a href="https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button</a></p>
-<p>The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context. The countries/regions mentioned are Russia, Latin America, China, and India. The major project relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India’s growing wealth, in reality people are growing poorer and poorer. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.</p>
-<p>The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world by asking a very similar question, but with all countries in the dataset in mind.</p>
-</section>
-<section id="research-question-and-hypothesis" class="level4">
-<h4 class="anchored" data-anchor-id="research-question-and-hypothesis">Research question and hypothesis</h4>
-<p>Thus, our research question is: what is the best model for predicting billionaire wealth? That is, what variables would be included in a multivariate linear regression with wealth.in.billions as the response variable?</p>
-<p>Our hypothesis is that variables such as wealth.how.category, location.gdp, wealth.inherited, and age will be included, as those seem to be pertinent to wealth accumulation.</p>
-<p><a href="https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917" class="uri">https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917</a></p>
+<p>Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected or even predicted by the other variables.</p>
 </section>
 </section>
 <section id="methodology" class="level1">
 <h1>Methodology</h1>
-<section id="data-cleaning" class="level4">
-<h4 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h4>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning">Data cleaning</h2>
 <p>Before any analysis, the dataset was tidied up.</p>
-<p>We filtered for a single year instead of working with the data over time to avoid complications. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth was also renamed to just wealth.</p>
+<section id="year" class="level4">
+<h4 class="anchored" data-anchor-id="year">Year</h4>
+<p>As mentioned in the dataset description, the data was collected at three different years, 1996, 2001, and 2014. We filtered for a single year instead of working with the data over time to allow us to control for year when building our linear regression. We chose the year 2001 because location.gdp was a variable of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014 in this dataset). The variable wealth.worth.in.billions was also renamed to just wealth.</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-   year mean_gdp
-  &lt;int&gt;    &lt;dbl&gt;
-1  1996  3.51e12
-2  2001  5.84e12
-3  2014  0      </code></pre>
+
 </div>
-</div>
+</section>
+<section id="industry" class="level4">
+<h4 class="anchored" data-anchor-id="industry">Industry</h4>
 <p>Another variable that is of interest is wealth.how.industry, whose values are strings representing the industries that made the billionaires wealthy. After renaming the variable, we combined related industries together. For example, “Venture capital”, “Hedge funds”, “Diversified financial”, and “Private equity/leveraged buyout” all fit into the “Money management” industry.</p>
 <div class="cell">
 
 </div>
+</section>
+<section id="age" class="level4">
+<h4 class="anchored" data-anchor-id="age">Age</h4>
 <p>demographics.age is another interesting variable; however, several billionaires have an age of 0 listed, which meant some had died before 2001. Because researching dozens of individual death dates or ages demands excessive effort, we decided to filter out any age with 0.</p>
 <div class="cell">
 
 </div>
+</section>
+<section id="company-type" class="level4">
+<h4 class="anchored" data-anchor-id="company-type">Company Type</h4>
 <p>We tidied up company.type for use by merging misspelled or mistyped values. In the end, the three values are “new”, “acquired”, and “other”, with “new” taking precedent over “acquired”.</p>
 <div class="cell">
 
 </div>
+</section>
+<section id="company-relationship" class="level4">
+<h4 class="anchored" data-anchor-id="company-relationship">Company Relationship</h4>
 <p>How the individual is related to their company (e.g.&nbsp;CEO, investor, founder, etc.) is represented by company.relationship. We cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation. President was collapsed into CEO, and employee and lawyer were collapsed into relation. Two observations where company relation is unknown were filtered out.</p>
 <div class="cell">
 
 </div>
+</section>
+<section id="company-age" class="level4">
+<h4 class="anchored" data-anchor-id="company-age">Company Age</h4>
 <p>How old the company is may also give some insight. We calculated the age of the company by subtracting its founding year (from company.founded) from 2001, saving the results to a column named company.age. A single observation with 0 as a founding year was dropped.</p>
 <div class="cell">
 
 </div>
+</section>
+<section id="inherited-wealth" class="level4">
+<h4 class="anchored" data-anchor-id="inherited-wealth">Inherited Wealth</h4>
 <p>Finally, the variable inherited is changed to a binary categorical variable. The end result of the cleaning is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
@@ -322,12 +350,15 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </div>
 </div>
 </section>
-<section id="preliminary-visualizations" class="level4">
-<h4 class="anchored" data-anchor-id="preliminary-visualizations">Preliminary visualizations</h4>
+</section>
+<section id="preliminary-visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="preliminary-visualizations">Preliminary visualizations</h2>
+<section id="age-1" class="level4">
+<h4 class="anchored" data-anchor-id="age-1">Age</h4>
 <div class="cell">
 
 </div>
-<p>The mean age of the billionaires is around 61.5762712 years old. Below are graphs of the age distribution and wealth plotted against age. We see that age follows a bell curve distribution. The relationship between age and wealth seems weak visually; however, age is still an interesting variable to consider.</p>
+<p>The mean age of the billionaires is around 61.5762712 years old. Below are graphs of the age distribution and wealth plotted against age. We see that age follows a bell curve distribution centered at around 60 years old. The relationship between age and wealth seems weak visually, and there does not appear to be a certain age range that contains significantly higher amounts of wealth than the others; however, age is still an interesting variable to consider.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/vis-by-age-1.png" class="img-fluid" width="672"></p>
@@ -336,10 +367,13 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <p><img src="report_files/figure-html/vis-by-age-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</section>
+<section id="company-age-1" class="level4">
+<h4 class="anchored" data-anchor-id="company-age-1">Company Age</h4>
 <div class="cell">
 
 </div>
-<p>The mean company age of the billionaires is 53.3510896. Below, company age is plotted in similar fashion as billionaire age. Most companies are younger than 100 years. It seems as if the older the company, the less wealthy the associated billionaire.</p>
+<p>The mean company age of the billionaires is 53.3510896. Below, company age is plotted in similar fashion as billionaire age. Most companies are younger than 100 years. We can see that the billionaires with wealth amounts above the majority (greater than $10 billion) are involved with companies that are 100 years old or younger.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/vis-by-comp-age-1.png" class="img-fluid" width="672"></p>
@@ -348,16 +382,16 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <p><img src="report_files/figure-html/vis-by-comp-age-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<div class="cell">
-
-</div>
-<p>Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.</p>
+</section>
+<section id="inherited-wealth-1" class="level4">
+<h4 class="anchored" data-anchor-id="inherited-wealth-1">Inherited Wealth</h4>
+<p>Just how many billionaires inherit their wealth? The bar plot below shows that while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/vis-by-inherit-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most compared to some other billionaires</p>
+<p>Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 10 billion USD. There appears to be more inherited billionaires in the 10-20 billion USD range, but more non-inherited billionaires in the 20+ billion USD range.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/vis-wealth-1.png" class="img-fluid" width="672"></p>
@@ -373,6 +407,9 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </div>
 </div>
 <p>The mean wealth of those who inherit their wealth seems to be higher than those who didn’t.</p>
+</section>
+<section id="industry-1" class="level4">
+<h4 class="anchored" data-anchor-id="industry-1">Industry</h4>
 <p>Next, we visualize the proportion of various company industries, as well as wealth distributions by industry.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -382,39 +419,41 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <p><img src="report_files/figure-html/industry-vis-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The proportions and numbers are summarized below; again, they show that wealth varies between the industries.</p>
+<p>The proportions and numbers are summarized below. The consumer goods, retail, and restaurants industry seems to dominant the billionaire population in terms of number of billionaires, but billionaire wealth is highest on average in the technology industry, understandably. In terms of average billionaire wealth, the top four industries are “Technology” “Media”, “Consumer goods, retail, and restaurants”, and “Money Management”.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 4
   industry                            mean_wealth count percent_industry
   &lt;chr&gt;                                     &lt;dbl&gt; &lt;int&gt;            &lt;dbl&gt;
-1 Consumer goods, retail, restaurants        3.97   119            68.4 
-2 Energy, mining, and metals                 2.08    33            19.0 
-3 Media                                      4.11    52            29.9 
-4 Money management                           2.76    81            46.6 
-5 Non-consumer industrial                    2.35     4             2.30
-6 Other                                      1.86    14             8.05
-7 Real estate, construction                  2.59    54            31.0 
-8 Technology                                 4.80    56            32.2 </code></pre>
+1 Consumer goods, retail, restaurants        3.97   119           28.8  
+2 Energy, mining, and metals                 2.08    33            7.99 
+3 Media                                      4.11    52           12.6  
+4 Money management                           2.76    81           19.6  
+5 Non-consumer industrial                    2.35     4            0.969
+6 Other                                      1.86    14            3.39 
+7 Real estate &amp; construction                 2.59    54           13.1  
+8 Technology                                 4.80    56           13.6  </code></pre>
 </div>
 </div>
+</section>
+<section id="country-gdp" class="level4">
+<h4 class="anchored" data-anchor-id="country-gdp">Country GDP</h4>
 <div class="cell">
 
 </div>
-<p>The mean GDP of all the locations the billionaires are based is 6.2615877^{12}. Below is a scatterplot displaying the relationship between GDP and wealth. It appears there may be an upward trend as the GDP of the billionaire’s location increases.</p>
+<p>The mean GDP of all the locations the billionaires are based is 6.2615877^{12}. Below is a scatterplot displaying the relationship between GDP and wealth. There is not a clear relationship the two. While we see the billionaires with the highest amounts of wealth come from the countries with the highest GDP, there is not an apparent linear trend. The average wealth for each level of country gdp appears roughly the same, with the highest country gdp likely having a slightly higher average wealth.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="report_files/figure-html/vis-by-gdp-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
-<section id="multivariate-linear-regression" class="level4">
-<h4 class="anchored" data-anchor-id="multivariate-linear-regression"><strong>Multivariate linear regression</strong></h4>
+</section>
+<section id="multivariate-linear-regression" class="level2">
+<h2 class="anchored" data-anchor-id="multivariate-linear-regression"><strong>Multivariate linear regression</strong></h2>
 <p>We plan to use multivariate linear regression to construct a model because we want to consider the effects of several of the variables in the dataset simultaneously on the wealth variable. The main question when constructing a multivariate linear regression model is which variables should be included and which variables should be excluded. One strategy to answer this question is backwards elimination. During backwards elimination, one starts with all variables of interest in the model. Then, each variable is excluded one at a time and the model is assessed to see if exclusion of the variable has improved it. If the model is improved with the variable gone, then it is removed and the process repeats until the model cannot be improved by variable exclusion any further. The criterion we use for variable exclusion is the AIC value, which characterizes how well the model fits the data. A lower AIC value means a better-fitting model, so if removing a variable results in a model with a lower AIC, then that is motivation for removing that variable from the model. We start with 8 variables which we considered interesting: age, company age, company relation, company type, industry, inheritance status, GDP, and wealth type.</p>
-</section>
-</section>
-<section id="results" class="level1">
-<h1>Results</h1>
+<section id="backwards-elimination" class="level4">
+<h4 class="anchored" data-anchor-id="backwards-elimination">Backwards Elimination</h4>
 <p>Tables showing the AIC values at each step of the process are shown. The variable name is the variable that was removed from the model to generate the corresponding AIC value.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -428,15 +467,15 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">all included</td>
-<td style="text-align: right;">2483.899</td>
+<td style="text-align: right;">2483.861</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">-age</td>
-<td style="text-align: right;">2482.594</td>
+<td style="text-align: right;">2482.576</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">-company.age</td>
-<td style="text-align: right;">2482.317</td>
+<td style="text-align: right;">2482.282</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">-company.relation</td>
@@ -444,23 +483,23 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </tr>
 <tr class="odd">
 <td style="text-align: left;">-company.type</td>
-<td style="text-align: right;">2480.748</td>
+<td style="text-align: right;">2480.696</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">-industry</td>
-<td style="text-align: right;">2487.738</td>
+<td style="text-align: right;">2487.732</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">-inherited</td>
-<td style="text-align: right;">2482.089</td>
+<td style="text-align: right;">2482.052</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">-location.gdp</td>
-<td style="text-align: right;">2484.224</td>
+<td style="text-align: right;">2484.185</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">-wealth.type</td>
-<td style="text-align: right;">2480.405</td>
+<td style="text-align: right;">2480.402</td>
 </tr>
 </tbody>
 </table>
@@ -701,7 +740,7 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 4 industryMoney management             -1.21 
 5 industryNon-consumer industrial      -1.62 
 6 industryOther                        -2.11 
-7 industryReal estate, construction    -1.38 
+7 industryReal estate &amp; construction   -1.38 
 8 industryTechnology                    0.831</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -710,8 +749,10 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </div>
 <p>The <span class="math inline">\(R^2\)</span> value of this model is 0.03561891.</p>
 </section>
-<section id="results-1" class="level1">
-<h1>Results</h1>
+</section>
+</section>
+<section id="conclusion" class="level1">
+<h1>Conclusion</h1>
 <p>After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.</p>
 <p>Although the several rounds of backwards elimination resulted in industry being the final variable, a close look at the <span class="math inline">\(R^2\)</span> value of the model shows that it is only 0.0356, which is not high. A low <span class="math inline">\(R^2\)</span> value means that very little of the variability in the data is captured by the model. Thus, while being the best variable out of the original eight, it is not a very good predictor on its own. This result makes sense; wealth accumulation is not as simple as entering the right industry type. After all, there are many, many people working in each of the listed industries. However, only a few are billionaires. In addition, the fact that most of the variables did not make it into the final model does not mean that becoming a billionaire is a totally random process. There must be reasons why some people accumulate fantastic amounts of wealth while others don’t. It is likely that such reasons are incredibly complex, and either may not be included in dataset as variables, or may be too complicated to even quantify or categorize.</p>
 <p>There are several directions we could go in for future studies. For one, a multivariate model using the variables can still be constructed using forward selection. We chose backwards elimination because we wanted to consider as many variables at once at the beginning. However, by doing forward selection, it is possible to obtain a different model than the one determined via backwards elimination. We could also investigate each variable separately, and observe whether there are any particularly high <span class="math inline">\(R^2\)</span> values associated with them. Finally, there clearly must be future research done to uncover other possible variables. Either way, while there are several factors that are known to lead to wealth accumulation, combining them into a mathematical model to predict wealth still remains an elusive task.</p>
