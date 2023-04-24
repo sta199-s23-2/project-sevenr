@@ -17,6 +17,28 @@ library(knitr)
 
 # Introduction and data
 
+The first question that comes to mind when a billionaire is the topic of conversation is: "How did they make that much money?" There are only so many in the world, making them a fascinating subject to study considering the success they have achieved. Some have inherited their wealth, while others reached it through entrepreneurship or investments. Because there are so many different ways a person can become a billionaire, it is interesting whether anything can be learned about the world's current billionaires, and whether that can be taken and used to estimate how much a given billionaire is worth.
+
+#### Research question and hypothesis
+
+**Thus, our research question is: what is the best indicator(s) for predicting a billionaire's wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?**
+
+Our hypothesis is that the industry of the billionaire's field of work, the gdp of the billionaire's country, and billionaire's age will be included, as those seem to be pertinent to wealth accumulation. Since some industries are booming more than others and have higher wealth "ceilings" (ex. technology industry vs. media industry), we believe knowing the industry has a sizable impact on the billionaire's wealth. We also hypothesize a positive linear relationship between a billionaire's wealth and the gdp of their country due to the benefits of a strong economy, making the country gdp a good indicator. Lastly, we think there is another positive linear relationship between wealth and the billionaire's age, as company founders that make up a large proportion of billionaires tend to accumulate more wealth over time, thus making age a good indicating variable as well.
+
+<https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
+
+#### Literature Review
+
+James Petras (2008) Global ruling class: Billionaires and how they \"make it\", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
+
+<https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
+
+The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context to explain how they acquired their wealth. The countries/regions mentioned are Russia, Latin America, China, and India. The major projected relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India's growing wealth, in reality people are growing poorer and poorer as the billionaires continue to exploit the system to gain more wealth. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.
+
+The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires' success is indifferent to that of the country's success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.
+
+#### Data
+
 ```{r}
 #| label: load-billion
 billion <- read.csv("data/billionaires.csv")
@@ -24,7 +46,7 @@ billion <- read.csv("data/billionaires.csv")
 glimpse(billion)
 ```
 
-The dataset we are working with is a large listing of billionaires across the world along with information about them collected at three different time points. There are 2614 observations and 22 variables. Not every observation is a unique billionaire; many are repeated up to three times (one at each time point). In addition, not every 22 variable is statistically interesting; many, such as name, rank, and company.name are identifying variables. However, the other variables are statistically useful and interesting, and our goal is to investigate them.
+The dataset we are working with to answer our research question is a large listing of billionaires across the world along with information about them collected at three different time points (1996, 2001, and 2014). There are 2614 observations and 22 variables. Not every observation is a unique billionaire; many are repeated up to three times (one at each time point). In addition, not every variable is statistically interesting; many, such as name, rank, and company.name are identifying variables. However, the other variables are statistically useful and interesting, and our goal is to investigate them.
 
 The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or were) researchers at the Peterson Institute for International Economics. They compiled the list of individuals from Forbes billionaire lists dating from 1996 to 2015. A large percentage of the additional information collected was publicly available, coming from sources such as Forbes, news articles, and company websites.
 
@@ -35,7 +57,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|--------------------|----------------------------------------------------|
+|---------------------|---------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -50,23 +72,7 @@ As mentioned, there are 22 variables, of which some are identifying variables, a
 | wealth.how.inherited       | whether the individual's wealth was inherited or not                           |
 | wealth.how.was.founder     | whether the individual founded their company or not                            |
 
-Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected by the other variables. One variable we are especially curious about exploring, given today's discourse about where wealth comes from, is wealth.how.inherited; do the billionaires who inherit some wealth to begin with accumulate more differently from those who are "self-made"?
-
-#### Literature Review
-
-<https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
-
-The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context. The countries/regions mentioned are Russia, Latin America, China, and India. The major project relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India's growing wealth, in reality people are growing poorer and poorer. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.
-
-The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world by asking a very similar question, but with all countries in the dataset in mind.
-
-#### Research question and hypothesis
-
-Thus, our research question is: what is the best model for predicting billionaire wealth? That is, what variables would be included in a multivariate linear regression with wealth.in.billions as the response variable?
-
-Our hypothesis is that variables such as wealth.how.category, location.gdp, wealth.inherited, and age will be included, as those seem to be pertinent to wealth accumulation.
-
-<https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
+Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected or even predicted by the other variables.
 
 # Methodology
 
@@ -231,7 +237,7 @@ billion2001 |>
   ggplot(aes(x = company.age)) +
   geom_histogram(color = "black", fill = "steelblue") +
   labs(
-    x = "Company of age (years)",
+    x = "Age of company (years)",
     y = "Number of companies",
     title = "Company age distribution of billionaires"
   ) +
@@ -258,7 +264,7 @@ not_inherited <- billion2001 |>
   filter(inherited == "Not inherited")
 ```
 
-Just how many billionaires inherit their wealth? The bar plot below shows that a while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.
+Just how many billionaires inherit their wealth? The bar plot below shows that while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.
 
 ```{r}
 #| label: vis-by-inherit
@@ -274,7 +280,7 @@ billion2001 |>
   theme_minimal()
 ```
 
-Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most compared to some other billionaires
+Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most compared to some other billionaires.
 
 ```{r}
 #| label: vis-wealth
@@ -311,7 +317,7 @@ billion2001 |>
   group_by(industry) |>
   summarize(n = n()) |>
   ggplot(aes(x = "", y = n, fill = industry)) +
-  geom_bar(stat="identity", width=1) + 
+  geom_bar(stat = "identity", width = 1) + 
   coord_polar("y", start = 0) +
   labs(
     title = "Distribution of industry types",
@@ -345,7 +351,8 @@ billion2001 |>
 #| label: mean-gdp
 
 mean_gdp <- billion2001 |>
-  summarize(mean_gdp = mean(location.gdp)) |> pull(mean_gdp)
+  summarize(mean_gdp = mean(location.gdp)) |> 
+  pull(mean_gdp)
 ```
 
 The mean GDP of all the locations the billionaires are based is `r mean_gdp`. Below is a scatterplot displaying the relationship between GDP and wealth. It appears there may be an upward trend as the GDP of the billionaire's location increases.
