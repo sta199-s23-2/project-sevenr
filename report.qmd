@@ -29,7 +29,7 @@ Our hypothesis is that the industry of the billionaire's field of work, the gdp 
 
 ## Literature Review
 
-James Petras (2008) Global ruling class: Billionaires and how they \"make it\", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
+James Petras (2008) Global ruling class: Billionaires and how they "make it", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
 
 <https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
 
@@ -52,12 +52,12 @@ The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or
 
 One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitical billionaires to any person on the planet who accumulates wealth.
 
-#### Relevant variables
+## Relevant variables
 
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|---------------------|---------------------------------------------------|
+|----------------------------|--------------------------------------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -696,7 +696,7 @@ glance(best_fit)$r.squared
 
 The $R^2$ value of this model is 0.03561891.
 
-# Results
+# Conclusion
 
 After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.
 
