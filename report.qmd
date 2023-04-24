@@ -19,7 +19,7 @@ library(knitr)
 
 The first question that comes to mind when a billionaire is the topic of conversation is: "How did they make that much money?" There are only so many in the world, making them a fascinating subject to study considering the success they have achieved. Some have inherited their wealth, while others reached it through entrepreneurship or investments. Because there are so many different ways a person can become a billionaire, it is interesting whether anything can be learned about the world's current billionaires, and whether that can be taken and used to estimate how much a given billionaire is worth.
 
-#### Research question and hypothesis
+## Research question and hypothesis
 
 **Thus, our research question is: what is the best indicator(s) for predicting a billionaire's wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?**
 
@@ -27,7 +27,7 @@ Our hypothesis is that the industry of the billionaire's field of work, the gdp 
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
-#### Literature Review
+## Literature Review
 
 James Petras (2008) Global ruling class: Billionaires and how they \"make it\", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
 
@@ -37,7 +37,7 @@ The article discusses the rise of billionaires in several major countries and re
 
 The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires' success is indifferent to that of the country's success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.
 
-#### Data
+## Data
 
 ```{r}
 #| label: load-billion
@@ -76,23 +76,23 @@ Of these variables, the wealth variable (underlined and italicized) makes for an
 
 # Methodology
 
-#### Data cleaning
+## Data cleaning
 
 Before any analysis, the dataset was tidied up.
 
-We filtered for a single year instead of working with the data over time to avoid complications. We chose the year 2001, because of the other variables, location.gdp was of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014). The variable wealth was also renamed to just wealth.
+#### Year
+
+As mentioned in the dataset description, the data was collected at three different years, 1996, 2001, and 2014. We filtered for a single year instead of working with the data over time to allow us to control for year when building our linear regression. We chose the year 2001 because location.gdp was a variable of interest, and 2001 is the most recent year for which there is data on GDP across the world (there is no GDP data for 2014 in this dataset). The variable wealth.worth.in.billions was also renamed to just wealth.
 
 ```{r}
 #| label: filter-2001
-
-billion |> 
-  group_by(year) |> 
-  summarize(mean_gdp = mean(location.gdp))
 
 billion2001 <- billion |>
   filter(year == 2001) |>
   rename(wealth = wealth.worth.in.billions)
 ```
+
+#### Industry
 
 Another variable that is of interest is wealth.how.industry, whose values are strings representing the industries that made the billionaires wealthy. After renaming the variable, we combined related industries together. For example, "Venture capital", "Hedge funds", "Diversified financial", and "Private equity/leveraged buyout" all fit into the "Money management" industry.
 
@@ -103,17 +103,21 @@ billion2001 <- billion2001 |>
   rename(industry = wealth.how.industry) |>
   mutate(
     industry = if_else(industry == 0, "Other", industry),
-    industry = if_else(industry == "Energy" | industry == "Mining and metals", "Energy, mining, and metals", industry),
     industry = if_else(str_detect(industry, "Technology"), "Technology", industry),
-    industry = if_else(industry == "Diversified financial", "Money management", industry),
-    industry = if_else(industry == "Hedge funds", "Money management", industry),
-    industry = if_else(industry == "Venture Capital", "Money management", industry),
-    industry = if_else(industry == "Private equity/leveraged buyout", "Money management", industry),
-    industry = if_else(industry == "Money Management", "Money management", industry),
-    industry = if_else(industry == "Constrution" | industry == "Real Estate", "Real estate, construction", industry),
-    industry = if_else(industry == "Consumer" | industry == "Retail, Restaurant", "Consumer goods, retail, restaurants", industry)
-  )
+    industry = if_else(industry %in% c("Energy", "Mining and metals"), 
+                       "Energy, mining, and metals", industry),
+    industry = if_else(industry %in% c("Constrution", "Real Estate"), 
+                       "Real estate & construction", industry),
+    industry = if_else(industry %in% c("Consumer", "Retail, Restaurant"), 
+                       "Consumer goods, retail, restaurants", industry),
+    industry = if_else(industry %in% c("Diversified financial", "Hedge funds", 
+                                       "Venture Capital", "Private equity/leveraged buyout",
+                                       "Money Management"),
+                       "Money management", industry)
+        )
 ```
+
+#### Age
 
 demographics.age is another interesting variable; however, several billionaires have an age of 0 listed, which meant some had died before 2001. Because researching dozens of individual death dates or ages demands excessive effort, we decided to filter out any age with 0.
 
@@ -124,6 +128,8 @@ billion2001 <- billion2001 |>
   rename(age = demographics.age) |>
   filter(age != 0)
 ```
+
+#### Company Type
 
 We tidied up company.type for use by merging misspelled or mistyped values. In the end, the three values are "new", "acquired", and "other", with "new" taking precedent over "acquired".
 
@@ -138,6 +144,8 @@ billion2001 <- billion2001 |>
   )
 ```
 
+#### Company Relationship
+
 How the individual is related to their company (e.g. CEO, investor, founder, etc.) is represented by company.relationship. We cleaned it up similarly to company.type. The unique relation types are founder, chairman, CEO, owner, investor, and relation, with founder taking precedent over CEO, CEO over the joint category of chairman/investor/owner, and chairman/investor/owner over relation. President was collapsed into CEO, and employee and lawyer were collapsed into relation. Two observations where company relation is unknown were filtered out.
 
 ```{r}
@@ -146,19 +154,25 @@ How the individual is related to their company (e.g. CEO, investor, founder, etc
 billion2001 <- billion2001 |>
   rename(company.relation = company.relationship) |>
   mutate(
-    company.relation = if_else(str_detect(company.relation, "founder"), "founder", company.relation),
-    company.relation = if_else(str_detect(company.relation, "president"), "ceo", company.relation),
-    company.relation = if_else(str_detect(company.relation, "CEO"), "ceo", company.relation),
-    company.relation = if_else(str_detect(company.relation, "Officer"), "ceo", company.relation),
-    company.relation = if_else(str_detect(company.relation, "man"), "chairman/investor/owner", company.relation),
-    company.relation = if_else(str_detect(company.relation, "investor"), "chairman/investor/owner", company.relation),
-    company.relation = if_else(str_detect(company.relation, "owner"), "chairman/investor/owner", company.relation),
-    company.relation = if_else(str_detect(company.relation, "lawer"), "relation", company.relation),
-    company.relation = if_else(str_detect(company.relation, "yee"), "relation", company.relation),
-    company.relation = if_else(str_detect(company.relation, "group"), "relation", company.relation)
-  ) |>
-  filter(nchar(company.relation) > 2)
+    company.relation = case_when(str_detect(company.relation, "founder") ~ "founder",
+                                 str_detect(company.relation, "president") ~ "ceo",
+                                 str_detect(company.relation, "CEO") ~ "ceo",
+                                 str_detect(company.relation, "Officer") ~ "ceo",
+                                 str_detect(company.relation, "man")
+                                 ~ "chairman/investor/owner",
+                                 str_detect(company.relation, "investor")
+                                 ~ "chairman/investor/owner",
+                                 str_detect(company.relation, "owner")
+                                 ~ "chairman/investor/owner",
+                                 str_detect(company.relation, "lawer") ~ "relation",
+                                 str_detect(company.relation, "yee") ~ "relation",
+                                 str_detect(company.relation, "group") ~ "relation",
+                                 TRUE ~ "relation")
+    ) |>
+      filter(nchar(company.relation) > 2)
 ```
+
+#### Company Age
 
 How old the company is may also give some insight. We calculated the age of the company by subtracting its founding year (from company.founded) from 2001, saving the results to a column named company.age. A single observation with 0 as a founding year was dropped.
 
@@ -170,6 +184,8 @@ billion2001 <- billion2001 |>
   mutate(company.age = 2001 - company.founded)
 ```
 
+#### Inherited Wealth
+
 Finally, the variable inherited is changed to a binary categorical variable. The end result of the cleaning is a dataset with 413 observations, each of which is a billionaire with information on them from the year 2001.
 
 ```{r}
@@ -177,23 +193,27 @@ Finally, the variable inherited is changed to a binary categorical variable. The
 
 billion2001 <- billion2001 |>
   mutate(
-    inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), "Not inherited", "Inherited"),
+    inherited = if_else(str_detect(wealth.how.inherited, "not inherited"), 
+                        "Not inherited", "Inherited"),
     inherited = as.factor(inherited)
     )
 
 glimpse(billion2001)
 ```
 
-#### Preliminary visualizations
+## Preliminary visualizations
+
+#### Age
 
 ```{r}
 #| label: mean-age
 
 mean_age <- billion2001 |> 
-  summarize(mean_age = mean(age)) |> pull(mean_age)
+  summarize(mean_age = mean(age)) |>
+  pull(mean_age)
 ```
 
-The mean age of the billionaires is around `r mean_age` years old. Below are graphs of the age distribution and wealth plotted against age. We see that age follows a bell curve distribution. The relationship between age and wealth seems weak visually; however, age is still an interesting variable to consider.
+The mean age of the billionaires is around `r mean_age` years old. Below are graphs of the age distribution and wealth plotted against age. We see that age follows a bell curve distribution centered at around 60 years old. The relationship between age and wealth seems weak visually, and there does not appear to be a certain age range that contains significantly higher amounts of wealth than the others; however, age is still an interesting variable to consider.
 
 ```{r}
 #| label: vis-by-age
@@ -220,14 +240,17 @@ billion2001 |>
   theme_minimal()
 ```
 
+#### Company Age
+
 ```{r}
 #| label: mean-company-age
 
 mean_comp_age <- billion2001 |> 
-  summarize(mean_age = mean(company.age)) |> pull(mean_age)
+  summarize(mean_age = mean(company.age)) |> 
+  pull(mean_age)
 ```
 
-The mean company age of the billionaires is `r mean_comp_age`. Below, company age is plotted in similar fashion as billionaire age. Most companies are younger than 100 years. It seems as if the older the company, the less wealthy the associated billionaire.
+The mean company age of the billionaires is `r mean_comp_age`. Below, company age is plotted in similar fashion as billionaire age. Most companies are younger than 100 years. We can see that the billionaires with wealth amounts above the majority (greater than \$10 billion) are involved with companies that are 100 years old or younger.
 
 ```{r}
 #| label: vis-by-comp-age
@@ -254,15 +277,7 @@ billion2001 |>
   theme_minimal()
 ```
 
-```{r}
-#| label: group-by-inheritance
-
-yes_inherited <- billion2001 |>
-  filter(inherited == "Inherited")
-
-not_inherited <- billion2001 |>
-  filter(inherited == "Not inherited")
-```
+#### Inherited Wealth
 
 Just how many billionaires inherit their wealth? The bar plot below shows that while most of the billionaires do not inherit their wealth, the difference in number between the two groups does not seem too significant.
 
@@ -280,7 +295,7 @@ billion2001 |>
   theme_minimal()
 ```
 
-Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 20 billion USD, which is not a small amount by any means, but also not the most compared to some other billionaires.
+Below is a histogram displaying the distribution of total wealth when faceted by inheritance status. The data skews right for both distributions, suggesting that the majority of both types of billionaires have less than 10 billion USD. There appears to be more inherited billionaires in the 10-20 billion USD range, but more non-inherited billionaires in the 20+ billion USD range.
 
 ```{r}
 #| label: vis-wealth
@@ -306,6 +321,8 @@ billion2001 |>
 ```
 
 The mean wealth of those who inherit their wealth seems to be higher than those who didn't.
+
+#### Industry
 
 Next, we visualize the proportion of various company industries, as well as wealth distributions by industry.
 
@@ -335,7 +352,7 @@ billion2001 |>
   theme_minimal()
 ```
 
-The proportions and numbers are summarized below; again, they show that wealth varies between the industries.
+The proportions and numbers are summarized below. The consumer goods, retail, and restaurants industry seems to dominant the billionaire population in terms of number of billionaires, but billionaire wealth is highest on average in the technology industry, understandably. In terms of average billionaire wealth, the top four industries are "Technology" "Media", "Consumer goods, retail, and restaurants", and "Money Management".
 
 ```{r}
 #| label: mean-by-industry
@@ -347,6 +364,8 @@ billion2001 |>
             percent_industry = (n()/nrow(yes_inherited))*100)
 ```
 
+#### Country GDP
+
 ```{r}
 #| label: mean-gdp
 
@@ -355,7 +374,7 @@ mean_gdp <- billion2001 |>
   pull(mean_gdp)
 ```
 
-The mean GDP of all the locations the billionaires are based is `r mean_gdp`. Below is a scatterplot displaying the relationship between GDP and wealth. It appears there may be an upward trend as the GDP of the billionaire's location increases.
+The mean GDP of all the locations the billionaires are based is `r mean_gdp`. Below is a scatterplot displaying the relationship between GDP and wealth. There is not a clear relationship the two. While we see the billionaires with the highest amounts of wealth come from the countries with the highest GDP, there is not an apparent linear trend. The average wealth for each level of country gdp appears roughly the same, with the highest country gdp likely having a slightly higher average wealth.
 
 ```{r}
 #| label: vis-by-gdp
@@ -371,11 +390,11 @@ labs(
   theme_minimal()
 ```
 
-#### **Multivariate linear regression**
+## **Multivariate linear regression**
 
 We plan to use multivariate linear regression to construct a model because we want to consider the effects of several of the variables in the dataset simultaneously on the wealth variable. The main question when constructing a multivariate linear regression model is which variables should be included and which variables should be excluded. One strategy to answer this question is backwards elimination. During backwards elimination, one starts with all variables of interest in the model. Then, each variable is excluded one at a time and the model is assessed to see if exclusion of the variable has improved it. If the model is improved with the variable gone, then it is removed and the process repeats until the model cannot be improved by variable exclusion any further. The criterion we use for variable exclusion is the AIC value, which characterizes how well the model fits the data. A lower AIC value means a better-fitting model, so if removing a variable results in a model with a lower AIC, then that is motivation for removing that variable from the model. We start with 8 variables which we considered interesting: age, company age, company relation, company type, industry, inheritance status, GDP, and wealth type.
 
-# Results
+#### Backwards Elimination
 
 Tables showing the AIC values at each step of the process are shown. The variable name is the variable that was removed from the model to generate the corresponding AIC value.
 
