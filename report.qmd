@@ -19,7 +19,7 @@ library(knitr)
 
 The first question that comes to mind when a billionaire is the topic of conversation is: "How did they make that much money?" There are only so many in the world, making them a fascinating subject to study considering the success they have achieved. Some have inherited their wealth, while others reached it through entrepreneurship or investments. Because there are so many different ways a person can become a billionaire, it is interesting whether anything can be learned about the world's current billionaires, and whether that can be taken and used to estimate how much a given billionaire is worth.
 
-#### Research question and hypothesis
+## Research question and hypothesis
 
 **Thus, our research question is: what is the best indicator(s) for predicting a billionaire's wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?**
 
@@ -27,9 +27,9 @@ Our hypothesis is that the industry of the billionaire's field of work, the gdp 
 
 <https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917>
 
-#### Literature Review
+## Literature Review
 
-James Petras (2008) Global ruling class: Billionaires and how they \"make it\", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
+James Petras (2008) Global ruling class: Billionaires and how they "make it", Journal of Contemporary Asia, 38:2,319-329, DOI: [10.1080/00472330701822355](https://doi.org/10.1080/00472330701822355)
 
 <https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&role=button>
 
@@ -37,7 +37,7 @@ The article discusses the rise of billionaires in several major countries and re
 
 The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires' success is indifferent to that of the country's success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.
 
-#### Data
+## Data
 
 ```{r}
 #| label: load-billion
@@ -52,12 +52,12 @@ The dataset was created in 2016 by Caroline Freund and Sarah Oliver, who are (or
 
 One caveat about this dataset, and any data categorizing wealth, is that defining wealth is a subjective matter. For example, Forbes had to make many choices in determining who to include in the lists used as sources for this dataset. One such choice was to exclude billionaires that obtained wealth from official positions (e.g. high government roles, state leader positions, etc.). Another choice was to exclude billionaires who obtained their wealth via illegal methods. In addition, individuals and companies may fabricate what they publish about themselves, or simply characterize themselves subjectively. Thus, when drawing conclusions from analysis of this dataset, we must be careful not to generalize statements about legal nonpolitical billionaires to any person on the planet who accumulates wealth.
 
-#### Relevant variables
+## Relevant variables
 
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|---------------------|---------------------------------------------------|
+|----------------------|--------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -76,7 +76,7 @@ Of these variables, the wealth variable (underlined and italicized) makes for an
 
 # Methodology
 
-#### Data cleaning
+## Data cleaning
 
 Before any analysis, the dataset was tidied up.
 
@@ -184,7 +184,7 @@ billion2001 <- billion2001 |>
 glimpse(billion2001)
 ```
 
-#### Preliminary visualizations
+## Preliminary visualizations
 
 ```{r}
 #| label: mean-age
@@ -371,7 +371,7 @@ labs(
   theme_minimal()
 ```
 
-#### **Multivariate linear regression**
+## **Multivariate linear regression**
 
 We plan to use multivariate linear regression to construct a model because we want to consider the effects of several of the variables in the dataset simultaneously on the wealth variable. The main question when constructing a multivariate linear regression model is which variables should be included and which variables should be excluded. One strategy to answer this question is backwards elimination. During backwards elimination, one starts with all variables of interest in the model. Then, each variable is excluded one at a time and the model is assessed to see if exclusion of the variable has improved it. If the model is improved with the variable gone, then it is removed and the process repeats until the model cannot be improved by variable exclusion any further. The criterion we use for variable exclusion is the AIC value, which characterizes how well the model fits the data. A lower AIC value means a better-fitting model, so if removing a variable results in a model with a lower AIC, then that is motivation for removing that variable from the model. We start with 8 variables which we considered interesting: age, company age, company relation, company type, industry, inheritance status, GDP, and wealth type.
 
@@ -677,7 +677,7 @@ glance(best_fit)$r.squared
 
 The $R^2$ value of this model is 0.03561891.
 
-# Results
+# Conclusion
 
 After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.
 
