@@ -57,7 +57,7 @@ One caveat about this dataset, and any data categorizing wealth, is that definin
 As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:
 
 | Variable name (unmodified) | Meaning                                                                        |
-|-------------------|-----------------------------------------------------|
+|--------------------|----------------------------------------------------|
 | company.relationship       | relationship to the company (founder, etc.)                                    |
 | company.sector             | the sector of the economy to which the business belongs                        |
 | company.type               | type of business of the company                                                |
@@ -71,6 +71,7 @@ As mentioned, there are 22 variables, of which some are identifying variables, a
 | wealth.how.industry        | the specific industry the individual profited from                             |
 | wealth.how.inherited       | whether the individual's wealth was inherited or not                           |
 | wealth.how.was.founder     | whether the individual founded their company or not                            |
+| wealth.type                | the type of billionaire that they are                                          |
 
 Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected or even predicted by the other variables.
 
