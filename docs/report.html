@@ -419,7 +419,7 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <p><img src="report_files/figure-html/industry-vis-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>The proportions and numbers are summarized below. The consumer goods, retail, and restaurants industry seems to dominant the billionaire population in terms of number of billionaires, but billionaire wealth is highest on average in the technology industry, understandably. In terms of average billionaire wealth, the top four industries are “Technology” “Media”, “Consumer goods, retail, and restaurants”, and “Money Management”.</p>
+<p>The proportions and numbers are summarized below. The consumer goods, retail, and restaurants industry seems to dominant the billionaire population in terms of number of billionaires, but billionaire wealth is highest on average in the technology industry, likely due to more extreme outliers. In terms of average billionaire wealth, the top four industries are “Technology” “Media”, “Consumer goods, retail, and restaurants”, and “Money Management”.</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8 × 4
@@ -747,6 +747,13 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 <pre><code>[1] 0.03561891</code></pre>
 </div>
 </div>
+<p><span class="math display">\[
+\hat{wealth} = 3.97 - 1.89*industry_{energy} + 0.14*industry_{media} - 1.21*industry_{finance} - 1.62*industry_{nonconsumer}
+\]</span></p>
+<p><span class="math display">\[
+- 2.11*industry_{other} - 1.38*industry_{realestate} + 0.83*industry_{technology}
+\]</span></p>
+<p>Based on this model, the predicted wealth of a billionaire in the “Consumer goods, retail, and restaurants” industry is roughly $3.97 billion, and the predicted wealth of a billionaire in the “Technology” industry is roughly $4.8 billion.</p>
 <p>The <span class="math inline">\(R^2\)</span> value of this model is 0.03561891.</p>
 <p>The visualization of the relationship between industry and wealth is below.</p>
 <div class="cell">
@@ -759,7 +766,7 @@ $ inherited                &lt;fct&gt; Not inherited, Not inherited, Not inherit
 </section>
 <section id="conclusion" class="level1">
 <h1>Conclusion</h1>
-<p>After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.</p>
+<p>After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry. Each industry has its own opportunities for wealth and growth prospects, and some have higher potential and greater freedoms that allow them to facilitate greater fortunes to their participants. Consumer goods, retail, and restaurants is an industry that reaches everybody around the world, and technology is an industry that is constantly growing and taking over the world, so it makes sense that they see the greatest wealth amounts. Keep in mind this data comes from the year 2001, though, so we would imagine an even greater billionaire wealth amount for those in the technology industry in 2023, as it has grown exponentially as an industry since 2001.</p>
 <p>Although the several rounds of backwards elimination resulted in industry being the final variable, a close look at the <span class="math inline">\(R^2\)</span> value of the model shows that it is only 0.0356, which is not high. A low <span class="math inline">\(R^2\)</span> value means that very little of the variability in the data is captured by the model. Thus, while being the best variable out of the original eight, it is not a very good predictor on its own. This result makes sense; wealth accumulation is not as simple as entering the right industry type. After all, there are many, many people working in each of the listed industries. However, only a few are billionaires. In addition, the fact that most of the variables did not make it into the final model does not mean that becoming a billionaire is a totally random process. There must be reasons why some people accumulate fantastic amounts of wealth while others don’t. It is likely that such reasons are incredibly complex, and either may not be included in dataset as variables, or may be too complicated to even quantify or categorize.</p>
 <p>There are several directions we could go in for future studies. For one, a multivariate model using the variables can still be constructed using forward selection. We chose backwards elimination because we wanted to consider as many variables at once at the beginning. However, by doing forward selection, it is possible to obtain a different model than the one determined via backwards elimination. We could also investigate each variable separately, and observe whether there are any particularly high <span class="math inline">\(R^2\)</span> values associated with them. Finally, there clearly must be future research done to uncover other possible variables. Either way, while there are several factors that are known to lead to wealth accumulation, combining them into a mathematical model to predict wealth still remains an elusive task.</p>
 <section id="section" class="level2">
