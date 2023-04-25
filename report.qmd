@@ -696,6 +696,24 @@ glance(best_fit)$r.squared
 
 The $R^2$ value of this model is 0.03561891.
 
+The visualization of the relationship between industry and wealth is below.
+
+```{r}
+#| label: display-industry
+#| message: false
+billion2001|>
+  ggplot(aes(y=wealth, x=industry, color = industry, group = industry))+
+  geom_point() +
+  stat_smooth(method = "lm",
+              se = FALSE) +
+  labs(
+    x = "Industry Type",
+    y = "Billionaire Wealth (in Billions of Dollars)",
+    title = "Intustry Type vs Billionaire Wealth"
+  )+
+  theme( axis.text.x=element_blank())
+```
+
 # Conclusion
 
 After several rounds of backwards elimination, the model only consists of the variable industry, which represents the various company industries. Thus, we conclude the best model for predicting billionaire wealth is actually a univariate linear regression model consisting of the variable industry. This means that when trying to predict billionaire wealth using our model, one needs to look at the coefficient associated with each industry type to determine whether wealth tends to be higher or lower in that industry.
