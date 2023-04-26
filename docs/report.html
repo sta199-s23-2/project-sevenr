@@ -106,10 +106,10 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#introduction-and-data" id="toc-introduction-and-data" class="nav-link active" data-scroll-target="#introduction-and-data">Introduction and data</a>
   <ul class="collapse">
-  <li><a href="#research-question-and-hypothesis" id="toc-research-question-and-hypothesis" class="nav-link" data-scroll-target="#research-question-and-hypothesis">Research question and hypothesis</a></li>
-  <li><a href="#literature-review" id="toc-literature-review" class="nav-link" data-scroll-target="#literature-review">Literature Review</a></li>
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#relevant-variables" id="toc-relevant-variables" class="nav-link" data-scroll-target="#relevant-variables">Relevant variables</a></li>
+  <li><a href="#literature-review" id="toc-literature-review" class="nav-link" data-scroll-target="#literature-review">Literature Review</a></li>
+  <li><a href="#research-question-and-hypothesis" id="toc-research-question-and-hypothesis" class="nav-link" data-scroll-target="#research-question-and-hypothesis">Research question and hypothesis</a></li>
   </ul></li>
   <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a>
   <ul class="collapse">
@@ -150,19 +150,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="introduction-and-data" class="level1">
 <h1>Introduction and data</h1>
 <p>The first question that comes to mind when a billionaire is the topic of conversation is: “How did they make that much money?” There are only so many in the world, making them a fascinating subject to study considering the success they have achieved. Some have inherited their wealth, while others reached it through entrepreneurship or investments. Because there are so many different ways a person can become a billionaire, it is interesting whether anything can be learned about the world’s current billionaires, and whether that can be taken and used to estimate how much a given billionaire is worth.</p>
-<section id="research-question-and-hypothesis" class="level2">
-<h2 class="anchored" data-anchor-id="research-question-and-hypothesis">Research question and hypothesis</h2>
-<p><strong>Thus, our research question is: what is the best indicator(s) for predicting a billionaire’s wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?</strong></p>
-<p>Our hypothesis is that the industry of the billionaire’s field of work, the gdp of the billionaire’s country, and billionaire’s age will be included, as those seem to be pertinent to wealth accumulation. Since some industries are booming more than others and have higher wealth “ceilings” (ex. technology industry vs.&nbsp;media industry), we believe knowing the industry has a sizable impact on the billionaire’s wealth. We also hypothesize a positive linear relationship between a billionaire’s wealth and the gdp of their country due to the benefits of a strong economy, making the country gdp a good indicator. Lastly, we think there is another positive linear relationship between wealth and the billionaire’s age, as company founders that make up a large proportion of billionaires tend to accumulate more wealth over time, thus making age a good indicating variable as well.</p>
-<p><a href="https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917" class="uri">https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917</a></p>
-</section>
-<section id="literature-review" class="level2">
-<h2 class="anchored" data-anchor-id="literature-review">Literature Review</h2>
-<p>James Petras (2008) Global ruling class: Billionaires and how they “make it”, Journal of Contemporary Asia, 38:2,319-329, DOI: <a href="https://doi.org/10.1080/00472330701822355">10.1080/00472330701822355</a></p>
-<p><a href="https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button" class="uri">https://www.tandfonline.com/doi/epdf/10.1080/00472330701822355?needAccess=true&amp;role=button</a></p>
-<p>The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context to explain how they acquired their wealth. The countries/regions mentioned are Russia, Latin America, China, and India. The major projected relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India’s growing wealth, in reality people are growing poorer and poorer as the billionaires continue to exploit the system to gain more wealth. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.</p>
-<p>The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires’ success is indifferent to that of the country’s success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.</p>
-</section>
 <section id="data" class="level2">
 <h2 class="anchored" data-anchor-id="data">Data</h2>
 <div class="cell">
@@ -202,8 +189,8 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 <p>As mentioned, there are 22 variables, of which some are identifying variables, and the rest are more useful or interesting. They are listed in the table:</p>
 <table class="table">
 <colgroup>
-<col style="width: 27%">
-<col style="width: 72%">
+<col style="width: 29%">
+<col style="width: 70%">
 </colgroup>
 <thead>
 <tr class="header">
@@ -271,6 +258,18 @@ $ wealth.how.was.political &lt;chr&gt; "True", "True", "True", "True", "True", "
 </tbody>
 </table>
 <p>Of these variables, the wealth variable (underlined and italicized) makes for an interesting response variable; that is, we are interested in seeing how this variable could possibly be affected or even predicted by the other variables.</p>
+</section>
+<section id="literature-review" class="level2">
+<h2 class="anchored" data-anchor-id="literature-review">Literature Review</h2>
+<p>The article discusses the rise of billionaires in several major countries and regions in the world, providing historical, social, and political context to explain how they acquired their wealth. The countries/regions mentioned are Russia, Latin America, China, and India. The major projected relevant details are the histories of each region, and if the billionaires inherited their wealth. For example, India is undergoing extreme class polarization; while the billionaires are used as evidence of India’s growing wealth, in reality people are growing poorer and poorer as the billionaires continue to exploit the system to gain more wealth. The article also lists the 3 general stages of becoming a billionaire in reference to these regions. What ties the regions together is that they are developing areas; although billionaires are emerging, one cannot conclude that the people themselves are growing wealthier.</p>
+<p>The article only focuses on four regions in the world in relation to wealth of a country and number of billionaires. Our research question aims to expand the scope to the entire world, and rather than focus on the political/social backgrounds of the regions to explain billionaire wealth, we are focusing on the billionaires and their companies themselves, in addition to their country of residence. This article does make us reconsider our original hypothesis of there being a positive linear relationship between wealth and country gdp. We at first thought a lower country gdp would result in a lower billionaire wealth, but this article suggests that in many developing countries with lower gdps, the billionaires’ success is indifferent to that of the country’s success due to class polarization and unfair governments, so billionaires continue to acquire wealth despite the general population struggling. Country gdp might not be such a good indicating variable, but we will see if anything changes when we look at a new dataset.</p>
+<p>James Petras (2008) Global ruling class: Billionaires and how they “make it”, Journal of Contemporary Asia, 38:2,319-329, DOI: <a href="https://doi.org/10.1080/00472330701822355">10.1080/00472330701822355</a></p>
+</section>
+<section id="research-question-and-hypothesis" class="level2">
+<h2 class="anchored" data-anchor-id="research-question-and-hypothesis">Research question and hypothesis</h2>
+<p>Thus, our research question is: what is the best indicator(s) for predicting a billionaire’s wealth? That is, what factors regarding a billionaire contribute the most to his/her wealth?</p>
+<p>Our hypothesis is that the industry of the billionaire’s field of work, the GDP of the billionaire’s country, and billionaire’s age will be included, as those seem to be pertinent to wealth accumulation. Since some industries are booming more than others and have higher wealth “ceilings” (ex. technology industry vs.&nbsp;media industry), we believe knowing the industry has a sizable impact on the billionaire’s wealth. We also hypothesize a positive linear relationship between a billionaire’s wealth and the GDP of their country due to the benefits of a strong economy, making the country GDP a good indicator. Lastly, we think there is another positive linear relationship between wealth and the billionaire’s age, as company founders that make up a large proportion of billionaires tend to accumulate more wealth over time, thus making age a good indicating variable as well.</p>
+<p><a href="https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917" class="uri">https://www.piie.com/publications/working-papers/origins-superrich-billionaire-characteristics-database?ResearchID=2917</a></p>
 </section>
 </section>
 <section id="methodology" class="level1">
